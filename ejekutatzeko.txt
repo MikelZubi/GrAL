@@ -1,0 +1,2 @@
+conda activate /scratch/zs4ie/a2t_env
+bash run.sh

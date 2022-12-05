@@ -1,0 +1,12 @@
+python run_ner.py \
+    --model_name_or_path xlm-roberta-base \
+    --do_train \
+    --do_eval \
+    --do_predict \
+    --evaluation_strategy epoch \
+    --num_train_epochs 3.0 \
+    --train_file MEE_BIO/all/train.json \
+    --validation_file MEE_BIO/all/dev.json \
+    --test_file MEE_BIO/all/test.json \
+    --output_dir Out \
+    --overwrite_output_dir \
