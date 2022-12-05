@@ -25,7 +25,7 @@ def translate(filenameR, filenameW):
     for line in jsonR:
         data = json.loads(line)
         newdata["tokens"] = data["tokens"]
-        newdata["entities"] = ["O" for i in range(len(data["tokens"]))]
+        newdata["labels"] = ["O" for i in range(len(data["tokens"]))]
         newdata["triggers"] = ["O" for i in range(len(data["tokens"]))]
         newdata["arguments"] = []
         start, end = getStartEnd(data["tokens"])
@@ -43,9 +43,9 @@ def translate(filenameR, filenameW):
                 if end[i] >= int(endPos):
                     amaiera = i
                     break
-            newdata["entities"][hasiera] = "B-" + data["entities"][label]["type"]
+            newdata["labels"][hasiera] = "B-" + data["entities"][label]["type"]
             for i in range(hasiera + 1,amaiera + 1):
-                newdata["entities"][i] = "I-" + data["entities"][label]["type"]
+                newdata["labels"][i] = "I-" + data["entities"][label]["type"]
         #Triggers Extraction
         for label in data["triggers"]:
             startPos = data["triggers"][label]["start"]
