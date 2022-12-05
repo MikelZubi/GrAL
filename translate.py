@@ -14,13 +14,16 @@ def main():
         for file in os.listdir(directoryR + '/' + language):
             fileR = pathR + '/' + file
             fileW = pathW + '/' + file[0:-1]
-            translate(fileR,fileW)
+            translate(fileR,fileW,file[0:-1])
 
 
-def translate(filenameR, filenameW):
+def translate(filenameR, filenameW,filetype):
+    allPath = 'MEE_BIO/all/'+filetype
     os.makedirs(os.path.dirname(filenameW), exist_ok=True)
+    os.makedirs(os.path.dirname(allPath), exist_ok=True)
     jsonR = open(filenameR, "r")
     jsonW = open(filenameW, "w")
+    jsonAll = open(allPath, "a")
     newdata = {}
     for line in jsonR:
         data = json.loads(line)
@@ -95,8 +98,10 @@ def translate(filenameR, filenameW):
             newdata["arguments"].append(cp.deepcopy(newdict))
         write_string = json.dumps(newdata,ensure_ascii=False)
         jsonW.write(write_string + '\n')
+        jsonAll.write(write_string + '\n')
     jsonR.close()
     jsonW.close()
+    jsonAll.close()
 
 def hasieratu():
     dirpath = os.path.join('MEE_BIO')
