@@ -329,6 +329,12 @@ def main():
         label_to_id = {i: i for i in range(len(label_list))}
     else:
         label_list = get_label_list(raw_datasets["train"][label_column_name])
+        if training_args.do_eval:
+            label_list += get_label_list(raw_datasets["validation"][label_column_name])
+        if training_args.do_predict:
+            label_list += get_label_list(raw_datasets["test"][label_column_name])
+        label_list = list(set(label_list))
+
         label_to_id = {l: i for i, l in enumerate(label_list)}
 
     num_labels = len(label_list)
