@@ -25,11 +25,10 @@ def translate(filenameR, filenameW,filetype):
     os.makedirs(os.path.dirname(allPath), exist_ok=True)
     jsonR = open(filenameR, "r")
     jsonW = open(filenameW, "w")
-    argJsonW = open(argFileW)
+    argJsonW = open(argFileW, "w")
     jsonAll = open(allPath, "a")
     newdata = {}
-    newdataArg = {}
-    trigCount = 0
+    lineCount = 0
     for line in jsonR:
         data = json.loads(line)
         newdata["tokens"] = data["tokens"]
@@ -68,11 +67,12 @@ def translate(filenameR, filenameW,filetype):
                 if end[i] >= int(endPos):
                     amaiera = i
                     break
-            newdataArg["tokens"] =
             newdata["triggers"][hasiera] = "B-" + data["triggers"][label]["type"]
             for i in range(hasiera + 1, amaiera + 1):
                 newdata["triggers"][i] = "I-" + data["triggers"][label]["type"]
         #Arguments Extraction
+        newdataArg = {}
+        prevTrigg = None
         for label in data["arguments"]:
             startPosT = data["triggers"][label["trigger"]]["start"]
             endPosT = data["triggers"][label["trigger"]]["end"]
@@ -98,16 +98,39 @@ def translate(filenameR, filenameW,filetype):
                 if end[i] >= int(endPosA):
                     amaieraA = i
                     break
-            newdict = label
-            newdict["trigger"] = [str(i) for i in range(hasieraT,amaieraT+1)]
-            newdict["argument"] = [str(i) for i in range(hasieraA, amaieraA + 1)]
-            newdata["arguments"].append(cp.deepcopy(newdict))
+            triggers = [i for i in range(hasieraT,amaieraT+1)]
+            if triggers != prevTrigg:
+                if prevTrigg != None:
+                    argWrite_string = json.dumps(newdataArg, ensure_ascii=False)
+                    argJsonW.write(argWrite_string + '\n')
+                newdataArg = {}
+                newdataArg["line"] = lineCount
+                newdataArg["tokens"] = []
+                for i in range(len(data["tokens"])):
+                    if i == triggers[0]:
+                        newdataArg["tokens"].append("$$$")
+                        for j in triggers:
+                            newdataArg["tokens"].append(data["tokens"][j])
+                        newdataArg["tokens"].append("$$$")
+                    else:
+                        newdataArg["tokens"].append(data["tokens"][i])
+                newdataArg["arguments"] = ["O" for i in range(len(newdataArg["tokens"]))]
+                prevTrigg = cp.deepcopy(triggers)
+            arguments = [i if hasieraA < triggers[0] else (i + 2) for i in range(hasieraA, amaieraA + 1)]
+            newdataArg["arguments"][arguments[0]] = "B-"+label["role"]
+            for i in arguments[1:]:
+                newdataArg["arguments"][i] ="I-"+label["role"]
         write_string = json.dumps(newdata,ensure_ascii=False)
         jsonW.write(write_string + '\n')
         jsonAll.write(write_string + '\n')
+        if prevTrigg != None:
+            argWrite_string = json.dumps(newdataArg, ensure_ascii=False)
+            argJsonW.write(argWrite_string + '\n')
+        lineCount+=1
     jsonR.close()
     jsonW.close()
     jsonAll.close()
+    argJsonW.close()
 
 def hasieratu():
     dirpath = os.path.join('MEE_BIO')
@@ -124,25 +147,6 @@ def getStartEnd(tokens):
         count += len(token) + 1
     return start, end
 
-def getArgTokens(tokens,trigger):
-    argTokens = []
-    triggerFound = False
-    for token in tokens:
-        if token == trigger:
-            argTokens.append("$$$")
-            argTokens.append(token)
-            argTokens.append("$$$")
-            triggerFound = True
-        else:
-            argTokens.append(token)
-        if token == ".":
-            if triggerFound:
-                break
-            else:
-                argTokens.clear()
-
-    #Begiratu, ola programatuta soilik puntu eta geroko argumentoak ahalko ziren atera.
-    return argTokens
 
 
 if __name__ == "__main__":
