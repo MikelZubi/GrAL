@@ -19,12 +19,17 @@ def main():
 
 def translate(filenameR, filenameW,filetype):
     allPath = 'MEE_BIO/all/'+filetype
+    argFileW = filenameW.split(".")[0] + "_arg" + ".json"
     os.makedirs(os.path.dirname(filenameW), exist_ok=True)
+    os.makedirs(os.path.dirname(argFileW), exist_ok=True)
     os.makedirs(os.path.dirname(allPath), exist_ok=True)
     jsonR = open(filenameR, "r")
     jsonW = open(filenameW, "w")
+    argJsonW = open(argFileW)
     jsonAll = open(allPath, "a")
     newdata = {}
+    newdataArg = {}
+    trigCount = 0
     for line in jsonR:
         data = json.loads(line)
         newdata["tokens"] = data["tokens"]
@@ -63,6 +68,7 @@ def translate(filenameR, filenameW,filetype):
                 if end[i] >= int(endPos):
                     amaiera = i
                     break
+            newdataArg["tokens"] =
             newdata["triggers"][hasiera] = "B-" + data["triggers"][label]["type"]
             for i in range(hasiera + 1, amaiera + 1):
                 newdata["triggers"][i] = "I-" + data["triggers"][label]["type"]
@@ -117,6 +123,27 @@ def getStartEnd(tokens):
         end.append(count + len(token))
         count += len(token) + 1
     return start, end
+
+def getArgTokens(tokens,trigger):
+    argTokens = []
+    triggerFound = False
+    for token in tokens:
+        if token == trigger:
+            argTokens.append("$$$")
+            argTokens.append(token)
+            argTokens.append("$$$")
+            triggerFound = True
+        else:
+            argTokens.append(token)
+        if token == ".":
+            if triggerFound:
+                break
+            else:
+                argTokens.clear()
+
+    #Begiratu, ola programatuta soilik puntu eta geroko argumentoak ahalko ziren atera.
+    return argTokens
+
 
 if __name__ == "__main__":
     main()
