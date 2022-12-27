@@ -19,14 +19,17 @@ def main():
 
 def translate(filenameR, filenameW,filetype):
     allPath = 'MEE_BIO/all/'+filetype
+    allPathArg = 'MEE_BIO/all/'+filetype.split(".")[0] + "_arg" + ".json"
     argFileW = filenameW.split(".")[0] + "_arg" + ".json"
     os.makedirs(os.path.dirname(filenameW), exist_ok=True)
     os.makedirs(os.path.dirname(argFileW), exist_ok=True)
     os.makedirs(os.path.dirname(allPath), exist_ok=True)
+    os.makedirs(os.path.dirname(allPathArg), exist_ok=True)
     jsonR = open(filenameR, "r")
     jsonW = open(filenameW, "w")
     argJsonW = open(argFileW, "w")
     jsonAll = open(allPath, "a")
+    jsonAllArg = open(allPathArg, "a")
     newdata = {}
     lineCount = 0
     for line in jsonR:
@@ -103,8 +106,10 @@ def translate(filenameR, filenameW,filetype):
                 if prevTrigg != None:
                     argWrite_string = json.dumps(newdataArg, ensure_ascii=False)
                     argJsonW.write(argWrite_string + '\n')
+                    jsonAllArg.write(argWrite_string + '\n')
                 newdataArg = {}
                 newdataArg["line"] = lineCount
+                newdataArg["language"] = filenameR.split("/")[1]
                 newdataArg["tokens"] = []
                 for i in range(len(data["tokens"])):
                     if i == triggers[0]:
@@ -131,6 +136,7 @@ def translate(filenameR, filenameW,filetype):
     jsonW.close()
     jsonAll.close()
     argJsonW.close()
+    jsonAllArg.close()
 
 def hasieratu():
     dirpath = os.path.join('MEE_BIO')
