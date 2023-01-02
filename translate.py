@@ -28,6 +28,15 @@ def translate(filenameR, filenameW,filetype):
     jsonR = open(filenameR, "r")
     jsonW = open(filenameW, "w")
     argJsonW = open(argFileW, "w")
+    #For count the lines in all 
+    try:
+        jsonAllRead = open(allPath, "r")
+        for count, _ in enumerate(jsonAllRead):
+            pass
+        lineCountAll = count + 1
+        jsonAllRead.close()
+    except:
+        lineCountAll = 0
     jsonAll = open(allPath, "a")
     jsonAllArg = open(allPathArg, "a")
     newdata = {}
@@ -109,7 +118,7 @@ def translate(filenameR, filenameW,filetype):
                     jsonAllArg.write(argWrite_string + '\n')
                 newdataArg = {}
                 newdataArg["line"] = lineCount
-                newdataArg["language"] = filenameR.split("/")[1]
+                newdataArg["lineAll"] = lineCountAll
                 newdataArg["tokens"] = []
                 for i in range(len(data["tokens"])):
                     if i == triggers[0]:
@@ -132,6 +141,7 @@ def translate(filenameR, filenameW,filetype):
             argWrite_string = json.dumps(newdataArg, ensure_ascii=False)
             argJsonW.write(argWrite_string + '\n')
         lineCount+=1
+        lineCountAll+=1
     jsonR.close()
     jsonW.close()
     jsonAll.close()

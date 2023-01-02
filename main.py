@@ -18,7 +18,7 @@ def main():
         model = model.to(device)
         model.eval()
         tokenizer = AutoTokenizer.from_pretrained('xlm-roberta-base')
-        tokenized_input, labels = tokenize_and_align_labels([["Alice", "is", "the", "boss", "of", "XYZ", "company"], ["Alice", "is", "the", "boss", "of", "XYZ", "company"]],tokenizer,device)
+        tokenized_input, labels = tokenize_and_align_labels([["Alice", "is", "the", "boss", "of", "XYZ", "company"]],tokenizer,device)
         #parameters = torch.load(path)
         #model.to(device)
         #model.load_from_state_dict(parameters)
