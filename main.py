@@ -4,41 +4,123 @@ import os
 import json
 import copy as cp
 from pdb import set_trace
+import spacy
 
 
 def main():
     device = torch.device(type='cuda',index=0)
     language = "english"
-    for task in os.listdir('Models/' + language):
-        print(task)
-        path = 'Models/' + language + '/' + task + '/'
-        configPath = open(path + 'config.json','r')
-        config = json.load(configPath)
-        model = XLMRobertaForTokenClassification.from_pretrained(path)
-        model = model.to(device)
-        model.eval()
-        tokenizer = AutoTokenizer.from_pretrained('xlm-roberta-base')
-        tokenized_input, labels = tokenize_and_align_labels([["Alice", "is", "the", "boss", "of", "XYZ", "company"]],tokenizer,device)
-        #parameters = torch.load(path)
-        #model.to(device)
-        #model.load_from_state_dict(parameters)
-        #pipe = pipeline("ner", model=model, tokenizer=tokenizer,device=device)
+    text = ""
+    nlp = spacy.blank("xx")
+    doc = nlp(text)
+    tokens = []
+    for token in doc:
+        tokens.append(token.text)
+    
+    #ENTITY
+    task = 'entity'
+    print(task)
+    path = 'Models/' + language + '/' + task + '/'
+    configPath = open(path + 'config.json','r')
+    config = json.load(configPath)
+    model = XLMRobertaForTokenClassification.from_pretrained(path)
+    model = model.to(device)
+    model.eval()
+    tokenizer = AutoTokenizer.from_pretrained('xlm-roberta-base',use_fast=True)
+    tokenized_input, labels = tokenize_and_align_labels([tokens],tokenizer,device)
+    out = model(**tokenized_input)['logits']
+    maxout = torch.argmax(out,dim=2)
+    maxout = maxout.to('cpu')
+    maxoutnp = maxout.numpy()
+    bio = []
+    for i in range(len(maxoutnp)):
+        bioT = []
+        for j in range(len(maxoutnp[i])):
+            if labels[i][j] != -100:
+                bioT.append(config['id2label'][str(maxoutnp[i][j])])
+        bio.append(bioT)
+    labels = []
+
+    #TODO Zeoze in lortutako datuekin, nonbaitte txukun idatzi...
+        
+
+
+    #TRIGGERS
+
+    task = 'triggers'
+    print(task)
+    path = 'Models/' + language + '/' + task + '/'
+    configPath = open(path + 'config.json','r')
+    config = json.load(configPath)
+    model = XLMRobertaForTokenClassification.from_pretrained(path)
+    model = model.to(device)
+    model.eval()
+    tokenizer = AutoTokenizer.from_pretrained('xlm-roberta-base',use_fast=True)
+    tokensArg = []
+    triggers = []
+    tokenized_input, labels = tokenize_and_align_labels([tokens],tokenizer,device)
+    out = model(**tokenized_input)['logits']
+    maxout = torch.argmax(out,dim=2)
+    maxout = maxout.to('cpu')
+    maxoutnp = maxout.numpy()
+    bio = []
+    for i in range(len(maxoutnp)):
+        bioT = []
+        for j in range(len(maxoutnp[i])):
+            if labels[i][j] != -100:
+                bioT.append(config['id2label'][str(maxoutnp[i][j])])
+        bio.append(bioT)
+    labels = []
+    for i in range(len(bio)):
+        for j in range(len(bio[i])):
+            if bio[i][j] != 'O':
+                tokenArg = []
+                for w in range(len(tokens)):
+                    if w == j:
+                        tokenArg.append("$$$")
+                        tokenArg.append(tokens[z][w])
+                        tokenArg.append("$$$")
+                        triggers.append(tokens[z][w])
+                    else:
+                        tokenArg.append(tokens[z][w])
+                tokensArg.append(cp.deepcopy(tokenArg))
+    
+    #TODO Zeoze in lortutako datuekin, nonbaitte txukun idatzi...
+
+
+    #ARGUMENTS
+
+    task = 'arguments'
+    print(task)
+    path = 'Models/' + language + '/' + task + '/'
+    configPath = open(path + 'config.json','r')
+    config = json.load(configPath)
+    model = XLMRobertaForTokenClassification.from_pretrained(path)
+    model = model.to(device)
+    model.eval()
+    tokenizer = AutoTokenizer.from_pretrained('xlm-roberta-base',use_fast=True)
+    for z in range(len(tokensArg)):
+        tokenized_input, labels = tokenize_and_align_labels([tokensArg[z]],tokenizer,device)
         out = model(**tokenized_input)['logits']
         maxout = torch.argmax(out,dim=2)
         maxout = maxout.to('cpu')
-        bio = []
         maxoutnp = maxout.numpy()
+        bio = []
         for i in range(len(maxoutnp)):
             bioT = []
             for j in range(len(maxoutnp[i])):
                 if labels[i][j] != -100:
                     bioT.append(config['id2label'][str(maxoutnp[i][j])])
-            bio.append(cp.deepcopy(bioT))
-        print(bio)        
+            bio.append(bioT)
+        labels = []
+        
+        #TODO Zeoze in lortutako datuekin, nonbaitte txukun idatzi...
+
+  
 
 # Tokenize all texts and align the labels with them.
 def tokenize_and_align_labels(examples,tokenizer,device):
-    tokenized_inputs = tokenizer(examples, truncation=True, is_split_into_words=True,return_tensors='pt').to(device)
+    tokenized_inputs = tokenizer(examples, padding=False,truncation=True, is_split_into_words=True,max_length = None,return_tensors='pt').to(device)
 
     labels = []
     for i, label in enumerate(examples):

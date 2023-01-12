@@ -29,7 +29,7 @@ def main():
         task = 'entity'
         print("----------------------------------------------------")
         print(task)
-        path = 'Models/' + language + '/' + task + '/'
+        path = 'Models/' + 'all' + '/' + task + '/'
         configPath = open(path + 'config.json','r')
         config = json.load(configPath)
         model = XLMRobertaForTokenClassification.from_pretrained(path)
@@ -72,7 +72,7 @@ def main():
         task = 'triggers'
         print("----------------------------------------------------")
         print(task)
-        path = 'Models/' + language + '/' + task + '/'
+        path = 'Models/' + 'all' + '/' + task + '/'
         configPath = open(path + 'config.json','r')
         config = json.load(configPath)
         model = XLMRobertaForTokenClassification.from_pretrained(path)
@@ -142,7 +142,7 @@ def main():
             else:
                 linesGold.append(data['lineAll'])
         testR.close()
-        path = 'Models/' + language + '/' + task + '/'
+        path = 'Models/' + 'all' + '/' + task + '/'
         configPath = open(path + 'config.json','r')
         config = json.load(configPath)
         model = XLMRobertaForTokenClassification.from_pretrained(path)
