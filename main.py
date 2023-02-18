@@ -10,12 +10,18 @@ import spacy
 def main():
     device = torch.device(type='cuda',index=0)
     language = "english"
-    text = ""
+    text = "Alice and Bob got married yesterday in Brazil "
     nlp = spacy.blank("xx")
     doc = nlp(text)
     tokens = []
     for token in doc:
         tokens.append(token.text)
+
+    result = {}
+    result["text"] = text
+    result["language"] = language
+    result["labels"]={}
+    result["triggers"]={}
     
     #ENTITY
     task = 'entity'
@@ -38,11 +44,24 @@ def main():
         for j in range(len(maxoutnp[i])):
             if labels[i][j] != -100:
                 bioT.append(config['id2label'][str(maxoutnp[i][j])])
-        bio.append(bioT)
+        bio+=bioT
     labels = []
 
-    #TODO Zeoze in lortutako datuekin, nonbaitte txukun idatzi...
-        
+    for i in range(len(bio)):
+        tag = bio[i]
+        if tag != "O":
+            splited = tag.split('-')
+            if splited[0] == 'B':
+                result["labels"][str(i)] = {}
+                result["labels"][str(i)]["Type"] = splited[1]
+                result["labels"][str(i)]["StartPosition"] = i
+                result["labels"][str(i)]["EndPosition"] = i
+                result["labels"][str(i)]["Name"] = tokens[i]
+                current = i
+            else:
+                result["labels"][str(current)]["EndPosition"]+=1
+                result["labels"][str(current)]["Name"]+= " " + tokens[i]
+                
 
 
     #TRIGGERS
@@ -69,7 +88,7 @@ def main():
         for j in range(len(maxoutnp[i])):
             if labels[i][j] != -100:
                 bioT.append(config['id2label'][str(maxoutnp[i][j])])
-        bio.append(bioT)
+        bio+=bioT
     labels = []
     for i in range(len(bio)):
         for j in range(len(bio[i])):
@@ -78,14 +97,29 @@ def main():
                 for w in range(len(tokens)):
                     if w == j:
                         tokenArg.append("$$$")
-                        tokenArg.append(tokens[z][w])
+                        tokenArg.append(tokens[z][w]) #Z hau ezdakit nondik atea den ERROREA TODO
                         tokenArg.append("$$$")
-                        triggers.append(tokens[z][w])
                     else:
                         tokenArg.append(tokens[z][w])
                 tokensArg.append(cp.deepcopy(tokenArg))
     
-    #TODO Zeoze in lortutako datuekin, nonbaitte txukun idatzi...
+    triggerPos = []
+    for i in range(len(bio)):
+        tag = bio[i]
+        if tag != "O":
+            splited = tag.split('-')
+            if splited[0] == 'B':
+                result["triggers"][str(i)] = {}
+                result["triggers"][str(i)]["Type"] = splited[1]
+                result["triggers"][str(i)]["StartPosition"] = i
+                result["triggers"][str(i)]["EndPosition"] = i
+                result["triggers"][str(i)]["Name"] = tokens[i]
+                result["triggers"][str(i)]["Arguments"] = {}
+                current = i
+                triggerPos.append(str(i))
+            else:
+                result["labels"][str(current)]["EndPosition"]+=1
+                result["labels"][str(current)]["Name"]+= " " + tokens[i]
 
 
     #ARGUMENTS
@@ -111,11 +145,26 @@ def main():
             for j in range(len(maxoutnp[i])):
                 if labels[i][j] != -100:
                     bioT.append(config['id2label'][str(maxoutnp[i][j])])
-            bio.append(bioT)
+            bio+=bioT
         labels = []
-        
-        #TODO Zeoze in lortutako datuekin, nonbaitte txukun idatzi...
+        for i in range(len(bio)):
+            tag = bio[i]
+            if tag != "O":
+                splited = tag.split('-')
+                if splited[0] == 'B':
+                    result["triggers"][triggerPos[z]]["Arguments"][str(i)]["Type"] = splited[1]
+                    result["triggers"][triggerPos[z]]["Arguments"][str(i)]["StartPosition"] = i
+                    result["triggers"][triggerPos[z]]["Arguments"][str(i)]["EndPosition"] = i
+                    result["triggers"][triggerPos[z]]["Arguments"][str(i)]["Name"] = tokens[i]
+                    current = i
+                    triggerPos.append(i)
+                else:
+                    result["labels"][triggerPos[z]]["Arguments"][str(current)]["EndPosition"]+=1
+                    result["labels"][triggerPos[z]]["Arguments"][str(current)]["Name"]+= " " + tokens[i]
+ 
 
+    with open('result.json', 'w') as fp:
+        json.dump(result, fp)
   
 
 # Tokenize all texts and align the labels with them.

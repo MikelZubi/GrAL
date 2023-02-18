@@ -9,7 +9,9 @@ do
         --do_eval \
         --do_predict \
         --evaluation_strategy steps \
-        --num_train_epochs 4.0 \
+        --per_device_train_batch_size 16 \
+        --per_device_eval_batch_size 16 \
+        --num_train_epochs 8.0 \
         --weight_decay 0.001 \
         --load_best_model_at_end True \
         --save_strategy steps \
@@ -21,13 +23,17 @@ do
         --output_dir Models/$language/entity \
         --overwrite_output_dir \
     
+    rm -rf Models/$language/entity/checkpoint-*/
+    
     python run_ner.py \
         --model_name_or_path xlm-roberta-base \
         --do_train \
         --do_eval \
         --do_predict \
         --evaluation_strategy steps \
-        --num_train_epochs 4.0 \
+        --per_device_train_batch_size 16 \
+        --per_device_eval_batch_size 16 \
+        --num_train_epochs 8.0 \
         --weight_decay 0.001 \
         --load_best_model_at_end True \
         --save_strategy steps \
@@ -38,6 +44,8 @@ do
         --test_file MEE_BIO/$language/test.json \
         --output_dir Models/$language/triggers \
         --overwrite_output_dir \
+
+    rm -rf Models/$language/triggers/checkpoint-*/
     
     python run_ner.py \
         --model_name_or_path xlm-roberta-base \
@@ -45,7 +53,9 @@ do
         --do_eval \
         --do_predict \
         --evaluation_strategy steps \
-        --num_train_epochs 4.0 \
+        --per_device_train_batch_size 16 \
+        --per_device_eval_batch_size 16 \
+        --num_train_epochs 8.0 \
         --weight_decay 0.001 \
         --load_best_model_at_end True \
         --save_strategy steps \
@@ -56,6 +66,10 @@ do
         --test_file MEE_BIO/$language/test_arg.json \
         --output_dir Models/$language/arguments \
         --overwrite_output_dir \
+
+    rm -rf Models/$language/arguments/checkpoint-*/
+    
+
     
 
 done
