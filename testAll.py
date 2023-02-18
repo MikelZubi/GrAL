@@ -4,7 +4,8 @@ import os
 import json
 import copy as cp
 from pdb import set_trace
-from sklearn.metrics import f1_score
+from seqeval.metrics import f1_score
+from seqeval.metrics import accuracy_score
 
 
 def main():
@@ -16,12 +17,18 @@ def main():
         testR =  open(test, "r")
         tokens = []
         entity = []
+        entityF = []
         triggers = []
+        triggersF = []
         for line in testR:
             data = json.loads(line)
             tokens.append(data['tokens'])
             entity.append(data['labels'])
+            for label in data['labels']:
+                entityF.append(label)
             triggers.append(data['triggers'])
+            for trigger in data['triggers']:
+                triggersF.append(trigger)
         testR.close()
 
         #ENTITY
@@ -29,40 +36,28 @@ def main():
         task = 'entity'
         print("----------------------------------------------------")
         print(task)
-        path = 'Models/' + 'all' + '/' + task + '/'
+        path = 'Models/all/' + task + '/'
         configPath = open(path + 'config.json','r')
         config = json.load(configPath)
         model = XLMRobertaForTokenClassification.from_pretrained(path)
         model = model.to(device)
         model.eval()
         tokenizer = AutoTokenizer.from_pretrained('xlm-roberta-base',use_fast=True)
-        accuracy = 0
-        f1 = 0
+        bio = []
         for z in range(len(tokens)):
             tokenized_input, labels = tokenize_and_align_labels([tokens[z]],tokenizer,device)
             out = model(**tokenized_input)['logits']
             maxout = torch.argmax(out,dim=2)
             maxout = maxout.to('cpu')
             maxoutnp = maxout.numpy()
-            bio = []
             for i in range(len(maxoutnp)):
                 bioT = []
                 for j in range(len(maxoutnp[i])):
                     if labels[i][j] != -100:
                         bioT.append(config['id2label'][str(maxoutnp[i][j])])
                 bio.append(bioT)
-            labels = []
-            for i in range(len(bio)):
-                for j in range(len(bio[i])):
-                    if bio[i][j] == entity[z][j]:
-                        accuracy+= 1 / len(bio[i])
-                    if entity[z][j] != 'O' and entity[z][j] not in labels:
-                        labels.append(entity[z][j])
-                    if bio[i][j] != 'O' and bio[i][j] not in labels:
-                        labels.append(bio[i][j])
-                f1 += f1_score(entity[z],bio[i],average='micro',labels=labels,zero_division=0)
-        accuracy = accuracy / len(tokens)
-        f1 = f1 / len(tokens)
+        f1 = f1_score(entity,bio,zero_division='0')
+        accuracy = accuracy_score(entity,bio)
         print('Accuracy: ' + str(accuracy))
         print('f1: ' + str(f1))
 
@@ -72,24 +67,22 @@ def main():
         task = 'triggers'
         print("----------------------------------------------------")
         print(task)
-        path = 'Models/' + 'all' + '/' + task + '/'
+        path = 'Models/all/' + task + '/'
         configPath = open(path + 'config.json','r')
         config = json.load(configPath)
         model = XLMRobertaForTokenClassification.from_pretrained(path)
         model = model.to(device)
         model.eval()
         tokenizer = AutoTokenizer.from_pretrained('xlm-roberta-base',use_fast=True)
-        accuracy = 0
-        f1 = 0
         tokensArg = []
         linesPre = []
+        bio = []        
         for z in range(len(tokens)):
             tokenized_input, labels = tokenize_and_align_labels([tokens[z]],tokenizer,device)
             out = model(**tokenized_input)['logits']
             maxout = torch.argmax(out,dim=2)
             maxout = maxout.to('cpu')
             maxoutnp = maxout.numpy()
-            bio = []
             for i in range(len(maxoutnp)):
                 bioT = []
                 for j in range(len(maxoutnp[i])):
@@ -97,31 +90,22 @@ def main():
                         bioT.append(config['id2label'][str(maxoutnp[i][j])])
                 bio.append(bioT)
             labels = []
-            for i in range(len(bio)):
-                for j in range(len(bio[i])):
-                    if bio[i][j] == triggers[z][j]:
-                        accuracy+= 1 / len(bio[i])
-                    if triggers[z][j] != 'O' and triggers[z][j] not in labels:
-                        labels.append(triggers[z][j])
-                    if bio[i][j] != 'O':
-                        if bio[i][j] not in labels:
-                            labels.append(bio[i][j])
-                        tokenArg = []
-                        linesPre.append(z)
-                        for w in range(len(tokens[z])):
-                            if w == j:
-                                tokenArg.append("$$$")
-                                tokenArg.append(tokens[z][w])
-                                tokenArg.append("$$$")
-                            else:
-                                tokenArg.append(tokens[z][w])
-                        tokensArg.append(cp.deepcopy(tokenArg))
-                f1 += f1_score(triggers[z],bio[i],average='micro',labels=labels,zero_division=0)
-        accuracy = accuracy / len(tokens)
-        f1 = f1 / len(tokens)
+            for j in range(len(bio[z])):
+                if bio[z][j] != 'O':
+                    tokenArg = []
+                    linesPre.append(z)
+                    for w in range(len(tokens[z])):
+                        if w == j:
+                            tokenArg.append("$$$")
+                            tokenArg.append(tokens[z][w])
+                            tokenArg.append("$$$")
+                        else:
+                            tokenArg.append(tokens[z][w])
+                    tokensArg.append(cp.deepcopy(tokenArg))
+        f1 = f1_score(triggers,bio,zero_division='0')
+        accuracy = accuracy_score(triggers,bio)
         print('Accuracy: ' + str(accuracy))
         print('f1: ' + str(f1))
-
 
         #ARGUMENTS
 
@@ -132,61 +116,65 @@ def main():
         testR =  open(test, "r")
         tokensArgGold = []
         arguments = []
+        argumentsF = []
         linesGold = []
         for line in testR:
             data = json.loads(line)
             tokensArgGold.append(data['tokens'])
             arguments.append(data['arguments'])
+            for argument in data['arguments']:
+                argumentsF.append(argument)
             if language != 'all':
                 linesGold.append(data['line'])
             else:
                 linesGold.append(data['lineAll'])
         testR.close()
-        path = 'Models/' + 'all' + '/' + task + '/'
+        path = 'Models/all/' + task + '/'
         configPath = open(path + 'config.json','r')
         config = json.load(configPath)
         model = XLMRobertaForTokenClassification.from_pretrained(path)
         model = model.to(device)
         model.eval()
         tokenizer = AutoTokenizer.from_pretrained('xlm-roberta-base',use_fast=True)
-        accuracy = 0
-        f1 = 0
+        bio = []
+        bioPipe=[]
+        founded = 0
+        for z in range(len(linesGold)):
+            tokenized_input, labels = tokenize_and_align_labels([tokensArgGold[z]],tokenizer,device)
+            out = model(**tokenized_input)['logits']
+            maxout = torch.argmax(out,dim=2)
+            maxout = maxout.to('cpu')
+            maxoutnp = maxout.numpy()
+            for i in range(len(maxoutnp)):
+                bioT = []
+                for j in range(len(maxoutnp[i])):
+                    if labels[i][j] != -100:
+                        bioT.append(config['id2label'][str(maxoutnp[i][j])])
+                bio.append(bioT)
+        goldPipe=[]
         for z in range(len(tokensArg)):
-            found = False
             for i in range(len(linesGold)):
-                if linesGold[i] == linesPre[z]:
-                    if tokensArg[z] == tokensArgGold[i]:
-                        found = True
-                        pos = i
-                        break
-
-            if found:
-                tokenized_input, labels = tokenize_and_align_labels([tokensArg[z]],tokenizer,device)
-                out = model(**tokenized_input)['logits']
-                maxout = torch.argmax(out,dim=2)
-                maxout = maxout.to('cpu')
-                maxoutnp = maxout.numpy()
-                bio = []
-                for i in range(len(maxoutnp)):
-                    bioT = []
-                    for j in range(len(maxoutnp[i])):
-                        if labels[i][j] != -100:
-                            bioT.append(config['id2label'][str(maxoutnp[i][j])])
-                    bio.append(bioT)
-                labels = []
-                for i in range(len(bio)):
-                    for j in range(len(bio[i])):
-                        if bio[i][j] == arguments[pos][j]:
-                            accuracy+= 1 / len(bio[i])
-                        if arguments[pos][j] != 'O' and arguments[pos][j] not in labels:
-                            labels.append(arguments[pos][j])
-                        if bio[i][j] != 'O' and bio[i][j] not in labels:
-                            labels.append(bio[i][j])
-                    f1 += f1_score(arguments[pos],bio[i],average='micro',labels=labels,zero_division=0)
-        accuracy = accuracy / len(tokensArgGold)
-        f1 = f1 / len(tokensArgGold)
+                if linesGold[i] == linesPre[z] and tokensArg[z] == tokensArgGold[i]:
+                    founded+=1
+                    goldPipe.append(arguments[i])
+                    tokenized_input, labels = tokenize_and_align_labels([tokensArg[z]],tokenizer,device)
+                    out = model(**tokenized_input)['logits']
+                    maxout = torch.argmax(out,dim=2)
+                    maxout = maxout.to('cpu')
+                    maxoutnp = maxout.numpy()
+                    for i in range(len(maxoutnp)):
+                        bioT = []
+                        for j in range(len(maxoutnp[i])):
+                            if labels[i][j] != -100:
+                                bioT.append(config['id2label'][str(maxoutnp[i][j])])
+                        bioPipe.append(bioT)
+                    break
+        f1 = f1_score(arguments,bio,zero_division='0')
+        accuracy = accuracy_score(arguments,bio)
+        f1Pipe = f1_score(goldPipe,bioPipe,zero_division='0')*(founded/len(linesGold))
         print('Accuracy: ' + str(accuracy))
         print('f1: ' + str(f1))
+        print('f1Pipe: ' + str(f1Pipe))
 
 
 
