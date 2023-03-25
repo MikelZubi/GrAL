@@ -1,4 +1,4 @@
-conda activate /scratch/zs4ie/a2t_env
+conda activate ~/a2t_env
 MEE dataseta deskargatzeko:
     wget http://nlp.uoregon.edu/download/MEE/MEE.zip
     unzip MEE.zip

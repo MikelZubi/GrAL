@@ -82,9 +82,12 @@ def translate(filenameR, filenameW,filetype):
             newdata["triggers"][hasiera] = "B-" + data["triggers"][label]["type"]
             for i in range(hasiera + 1, amaiera + 1):
                 newdata["triggers"][i] = "I-" + data["triggers"][label]["type"]
+
+        
         #Arguments Extraction
         newdataArg = {}
         prevTrigg = None
+        annotatedTriggers = []
         for label in data["arguments"]:
             startPosT = data["triggers"][label["trigger"]]["start"]
             endPosT = data["triggers"][label["trigger"]]["end"]
@@ -120,6 +123,7 @@ def translate(filenameR, filenameW,filetype):
                 newdataArg["line"] = lineCount
                 newdataArg["lineAll"] = lineCountAll
                 newdataArg["tokens"] = []
+                annotatedTriggers.append((startPosT,endPosT))
                 for i in range(len(data["tokens"])):
                     if i == triggers[0]:
                         newdataArg["tokens"].append("$$$")
@@ -140,8 +144,43 @@ def translate(filenameR, filenameW,filetype):
         if prevTrigg != None:
             argWrite_string = json.dumps(newdataArg, ensure_ascii=False)
             argJsonW.write(argWrite_string + '\n')
+            jsonAllArg.write(argWrite_string + '\n')
+        
+        #Trigger without Arguments:
+        for trigger in data["triggers"]:
+            startPosT = data["triggers"][trigger]["start"]
+            endPosT = data["triggers"][trigger]["end"]
+            if (startPosT,endPosT) not in annotatedTriggers:
+                if ';' in endPosT:
+                    endPosT = endPosT.split(";")[1]
+                for i in range(0, len(start)):
+                    if start[i] > int(startPosT):
+                        hasieraT = i - 1
+                        break
+                for i in range(hasieraT, len(end)):
+                    if end[i] >= int(endPosT):
+                        amaieraT = i
+                        break
+                triggers = [i for i in range(hasieraT,amaieraT+1)]
+                newdataArg = {}
+                newdataArg["line"] = lineCount
+                newdataArg["lineAll"] = lineCountAll
+                newdataArg["tokens"] = []
+                for i in range(len(data["tokens"])):
+                    if i == triggers[0]:
+                        newdataArg["tokens"].append("$$$")
+                        for j in triggers:
+                            newdataArg["tokens"].append(data["tokens"][j])
+                        newdataArg["tokens"].append("$$$")
+                    else:
+                        newdataArg["tokens"].append(data["tokens"][i])
+                newdataArg["arguments"] = ["O" for i in range(len(newdataArg["tokens"]))]
+                argWrite_string = json.dumps(newdataArg, ensure_ascii=False)
+                argJsonW.write(argWrite_string + '\n')
+                jsonAllArg.write(argWrite_string + '\n')
         lineCount+=1
         lineCountAll+=1
+
     jsonR.close()
     jsonW.close()
     jsonAll.close()

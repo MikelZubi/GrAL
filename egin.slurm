@@ -1,23 +1,29 @@
-
-
-#eval "$(conda shell.bash hook)"
-#conda activate ~/a2t_env
+#!/bin/bash
+#SBATCH --job-name=TRAIN_ARG
+#SBATCH --cpus-per-task=1
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --mem=8GB
+#SBATCH --gres=gpu:1
+#SBATCH --output=./SLURM/LOG/irteeraTrainArg.log
+#SBATCH --error=./SLURM/ERRORE/erroreTrainArg.err
 
 source ~/inguruneak/transformers-4.6.0/bin/activate
 
+echo "Entrenamentuaren hasiera"
 
 for dir in MEE_BIO/*/
 do
     language=$(basename "$dir")
     echo "$language"
-    python run_ner.py \
+    srun python run_ner.py \
         --model_name_or_path xlm-roberta-base \
         --do_train \
         --do_eval \
         --do_predict \
         --evaluation_strategy steps \
-        --per_device_train_batch_size 16 \
-        --per_device_eval_batch_size 16 \
+        --per_device_train_batch_size 32 \
+        --per_device_eval_batch_size 32 \
         --num_train_epochs 16.0 \
         --weight_decay 0.001 \
         --metric_for_best_model f1 \
@@ -33,14 +39,14 @@ do
     
     rm -rf Models/$language/entity/checkpoint-*/
     
-    python run_ner.py \
+    srun python run_ner.py \
         --model_name_or_path xlm-roberta-base \
         --do_train \
         --do_eval \
         --do_predict \
         --evaluation_strategy epoch \
-        --per_device_train_batch_size 16 \
-        --per_device_eval_batch_size 16 \
+        --per_device_train_batch_size 32 \
+        --per_device_eval_batch_size 32 \
         --num_train_epochs 32.0 \
         --weight_decay 0.001 \
         --metric_for_best_model f1 \
@@ -55,14 +61,14 @@ do
 
     rm -rf Models/$language/triggers/checkpoint-*/
     
-    python run_ner.py \
+    srun python run_ner.py \
         --model_name_or_path xlm-roberta-base \
         --do_train \
         --do_eval \
         --do_predict \
         --evaluation_strategy epoch \
-        --per_device_train_batch_size 16 \
-        --per_device_eval_batch_size 16 \
+        --per_device_train_batch_size 32 \
+        --per_device_eval_batch_size 32 \
         --num_train_epochs 64.0 \
         --weight_decay 0.001 \
         --metric_for_best_model f1 \
@@ -81,9 +87,10 @@ do
     
 
 done
-echo "Test-a ejekutatzen"
+echo "Test-ak ejekutatzen"
 
-python test.py
-python testAll.py
+srun python test.py
+srun python testAll.py
+srun python testCross.py
 
 echo "Bukatuta"
