@@ -1,9 +1,4 @@
-#eval "$(conda shell.bash hook)"
-#conda activate ~/a2t_env
-
-#source ~/inguruneak/GrAL/bin/activate
-
-source ~/inguruneak/transformers-4.6.0/bin/activate
+source ~/inguruneak/GRAL/bin/activate
 
 
 echo "Test-ak ejekutatzen"

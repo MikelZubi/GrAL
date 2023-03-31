@@ -214,7 +214,9 @@ def main(useModel=True):
 
                 #Errore zuzenketa bat Japoneseko parte baten emateu tokenizerrak zeoze raroa itten dula eta token bat jaten dula.
                 if len(bioPipe[z]) < len(tokensArg[z]):
-                    bioPipe[z].append("O")             
+                    print("Sartua")
+                    for i in range(len(bioPipe[z]),len(tokensArg[z])):
+                        bioPipe[z].append("O")             
 
                 if tokensArg[z] not in tokensArgGold:
                     tokensArgGold.insert(z,tokensArg[z])

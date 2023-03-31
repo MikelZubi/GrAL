@@ -4,11 +4,11 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --mem=8GB
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:2
 #SBATCH --output=./SLURM/LOG/irteeraTrainArg.log
 #SBATCH --error=./SLURM/ERRORE/erroreTrainArg.err
 
-source ~/inguruneak/transformers-4.6.0/bin/activate
+source ~/inguruneak/GRAL/bin/activate
 
 echo "Entrenamentuaren hasiera"
 
@@ -22,8 +22,8 @@ do
         --do_eval \
         --do_predict \
         --evaluation_strategy steps \
-        --per_device_train_batch_size 32 \
-        --per_device_eval_batch_size 32 \
+        --per_device_train_batch_size 16 \
+        --per_device_eval_batch_size 16 \
         --num_train_epochs 16.0 \
         --weight_decay 0.001 \
         --metric_for_best_model f1 \
@@ -45,8 +45,8 @@ do
         --do_eval \
         --do_predict \
         --evaluation_strategy epoch \
-        --per_device_train_batch_size 32 \
-        --per_device_eval_batch_size 32 \
+        --per_device_train_batch_size 16 \
+        --per_device_eval_batch_size 16 \
         --num_train_epochs 32.0 \
         --weight_decay 0.001 \
         --metric_for_best_model f1 \
@@ -67,8 +67,8 @@ do
         --do_eval \
         --do_predict \
         --evaluation_strategy epoch \
-        --per_device_train_batch_size 32 \
-        --per_device_eval_batch_size 32 \
+        --per_device_train_batch_size 16 \
+        --per_device_eval_batch_size 16 \
         --num_train_epochs 64.0 \
         --weight_decay 0.001 \
         --metric_for_best_model f1 \

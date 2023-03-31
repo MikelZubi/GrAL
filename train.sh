@@ -3,7 +3,7 @@
 #eval "$(conda shell.bash hook)"
 #conda activate ~/a2t_env
 
-source ~/inguruneak/transformers-4.6.0/bin/activate
+source ~/inguruneak/GRAL/bin/activate
 
 
 for dir in MEE_BIO/*/
