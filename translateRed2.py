@@ -2,32 +2,29 @@ import os
 import json
 import shutil
 import copy as cp
+import random as rd
 
 def main():
-    directoryR = 'MEE'
-    directoryW = 'MEE_BIO'
+    reduce()
+    directoryR = 'MEE_REDUCED2'
+    directoryW = 'MEE_BIO_REDUCED2'
     hasieratu()
     for language in os.listdir(directoryR):
         pathR = directoryR + '/' + language
         pathW = directoryW + '/' + language
         print(language)
-        for file in os.listdir(directoryR + '/' + language):
-            fileR = pathR + '/' + file
-            fileW = pathW + '/' + file[0:-1]
-            translate(fileR,fileW,file[0:-1])
+        for filetype in os.listdir(directoryR + '/' + language):
+            fileR = pathR + '/' + filetype + '/train.jsonl'
+            fileW = pathW + '/' + filetype + '/train.json'
+            translate(fileR,fileW,filetype)
 
 
 def translate(filenameR, filenameW,filetype):
-    allPath = 'MEE_BIO/all/'+filetype
-    allPathArg = 'MEE_BIO/all/'+filetype.split(".")[0] + "_arg" + ".json"
-    argFileW = filenameW.split(".")[0] + "_arg" + ".json"
+    allPath = 'MEE_BIO_REDUCED2/all/'+ filetype + '/train.json'
     os.makedirs(os.path.dirname(filenameW), exist_ok=True)
-    os.makedirs(os.path.dirname(argFileW), exist_ok=True)
     os.makedirs(os.path.dirname(allPath), exist_ok=True)
-    os.makedirs(os.path.dirname(allPathArg), exist_ok=True)
     jsonR = open(filenameR, "r")
     jsonW = open(filenameW, "w")
-    argJsonW = open(argFileW, "w")
     #For count the lines in all 
     try:
         jsonAllRead = open(allPath, "r")
@@ -38,15 +35,21 @@ def translate(filenameR, filenameW,filetype):
     except:
         lineCountAll = 0
     jsonAll = open(allPath, "a")
-    jsonAllArg = open(allPathArg, "a")
+    if filetype == 'entities':
+        entities(jsonR,jsonW,jsonAll)
+    elif filetype == 'triggers':
+        triggers(jsonR,jsonW,jsonAll)
+    else:
+        arguments(jsonR,jsonW,jsonAll,lineCountAll)
+    
+
+def entities(jsonR,jsonW,jsonAll):
     newdata = {}
-    lineCount = 0
     for line in jsonR:
         data = json.loads(line)
         newdata["tokens"] = data["tokens"]
         newdata["labels"] = ["O" for i in range(len(data["tokens"]))]
-        newdata["triggers"] = ["O" for i in range(len(data["tokens"]))]
-        newdata["arguments"] = []
+        newdata["triggers"] = ["O" for i in range(len(data["tokens"]))] #Entrenatzeakoan bestela errore
         start, end = getStartEnd(data["tokens"])
         #Entities extraction
         for label in data["entities"]:
@@ -65,6 +68,21 @@ def translate(filenameR, filenameW,filetype):
             newdata["labels"][hasiera] = "B-" + data["entities"][label]["type"]
             for i in range(hasiera + 1,amaiera + 1):
                 newdata["labels"][i] = "I-" + data["entities"][label]["type"]
+        write_string = json.dumps(newdata,ensure_ascii=False)
+        jsonW.write(write_string + '\n')
+        jsonAll.write(write_string + '\n')
+    jsonR.close()
+    jsonW.close()
+    jsonAll.close()
+
+def triggers(jsonR,jsonW,jsonAll):
+    newdata = {}
+    for line in jsonR:
+        data = json.loads(line)
+        newdata["tokens"] = data["tokens"]
+        newdata["labels"] = ["O" for i in range(len(data["tokens"]))] #Entrenatzeakoan bestela errore
+        newdata["triggers"] = ["O" for i in range(len(data["tokens"]))]
+        start, end = getStartEnd(data["tokens"])
         #Triggers Extraction
         for label in data["triggers"]:
             startPos = data["triggers"][label]["start"]
@@ -82,6 +100,19 @@ def translate(filenameR, filenameW,filetype):
             newdata["triggers"][hasiera] = "B-" + data["triggers"][label]["type"]
             for i in range(hasiera + 1, amaiera + 1):
                 newdata["triggers"][i] = "I-" + data["triggers"][label]["type"]
+        write_string = json.dumps(newdata,ensure_ascii=False)
+        jsonW.write(write_string + '\n')
+        jsonAll.write(write_string + '\n')
+    jsonR.close()
+    jsonW.close()
+    jsonAll.close()
+
+def arguments(jsonR,jsonW,jsonAll,lineCountAll):
+    newdataArg = {}
+    lineCount  = 0
+    for line in jsonR:
+        data = json.loads(line)
+        start, end = getStartEnd(data["tokens"])
         #Arguments Extraction
         newdataArg = {}
         prevTrigg = None
@@ -114,8 +145,8 @@ def translate(filenameR, filenameW,filetype):
             if triggers != prevTrigg:
                 if prevTrigg != None:
                     argWrite_string = json.dumps(newdataArg, ensure_ascii=False)
-                    argJsonW.write(argWrite_string + '\n')
-                    jsonAllArg.write(argWrite_string + '\n')
+                    jsonW.write(argWrite_string + '\n')
+                    jsonAll.write(argWrite_string + '\n')
                 newdataArg = {}
                 newdataArg["line"] = lineCount
                 newdataArg["lineAll"] = lineCountAll
@@ -134,22 +165,18 @@ def translate(filenameR, filenameW,filetype):
             newdataArg["arguments"][arguments[0]] = "B-"+label["role"]
             for i in arguments[1:]:
                 newdataArg["arguments"][i] ="I-"+label["role"]
-        write_string = json.dumps(newdata,ensure_ascii=False)
-        jsonW.write(write_string + '\n')
-        jsonAll.write(write_string + '\n')
         if prevTrigg != None:
             argWrite_string = json.dumps(newdataArg, ensure_ascii=False)
-            argJsonW.write(argWrite_string + '\n')
+            jsonW.write(argWrite_string + '\n')
+            jsonAll.write(argWrite_string + '\n')
         lineCount+=1
         lineCountAll+=1
     jsonR.close()
     jsonW.close()
     jsonAll.close()
-    argJsonW.close()
-    jsonAllArg.close()
 
 def hasieratu():
-    dirpath = os.path.join('MEE_BIO')
+    dirpath = os.path.join('MEE_BIO_REDUCED2')
     if os.path.exists(dirpath):
         shutil.rmtree(dirpath)
 
@@ -164,6 +191,44 @@ def getStartEnd(tokens):
     return start, end
 
 
+#Labelak jun sartzen denak 12508 euki arte (esaldi baten pasatzen bada berdin du). Bestek borratu (ez sartu)
+#Triggerrak jun sartzen denak (Asta ez dittuenak berez) 1125 euki arte (esaldi baten pasatzen bada berdin du). Bestek borratu (ez sartu)
+#Argumentuak jun sartzen denak 1416 euki arte. Bestek borratu (Ez sartu). Goatu gaztelera eztela allatzen kantitate orreta
+def reduce():
+    rd.seed(16)
+    directoryR = 'MEE'
+    directoryW = 'MEE_REDUCED2'
+    dirpath = os.path.join(directoryW)
+    motak = ["entities","triggers","arguments"]
+    maxim = [12508,1125,1416]
+    lines = []
+    if os.path.exists(dirpath):
+        shutil.rmtree(dirpath)
+    for j in range(3):
+        print(motak[j])
+        for language in os.listdir(directoryR):
+            print(language)
+            pathR = directoryR + '/' + language
+            pathW = directoryW + '/' + language + '/' + motak[j]
+            lines.clear()
+            for file in os.listdir(directoryR + '/' + language):
+                fileR = pathR + '/' + file
+                jsonR = open(fileR, "r")
+                lines += [json.loads(line) for line in jsonR]
+                jsonR.close()
+            rd.shuffle(lines)
+            fileW = pathW +'/train.jsonl'
+            os.makedirs(os.path.dirname(fileW), exist_ok=True)
+            jsonW = open(fileW,'w')
+            count = 0
+            for line in lines:
+                newLines = cp.deepcopy(line)
+                count += len(line[motak[j]])
+                write_string = json.dumps(newLines,ensure_ascii=False)
+                jsonW.write(write_string + '\n')
+                if count > maxim[j]:
+                    break
+            jsonW.close()
 
 if __name__ == "__main__":
     main()

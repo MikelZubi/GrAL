@@ -24,7 +24,7 @@ def main(useModel=True):
         languages.append(language)
         print("****************************************************")
         print(language)
-        test = 'MEE_BIO/' + language + '/test.json'
+        test = 'MEE_BIO_REDUCED/' + language + '/test.json'
         testR =  open(test, "r")
         tokens = []
         entity = []
@@ -47,7 +47,7 @@ def main(useModel=True):
         task = 'entity'
         print("----------------------------------------------------")
         print(task)
-        path = 'Models/' + language + '/' + task + '/'
+        path = 'Models_REDUCED/' + language + '/' + task + '/'
         if(useModel):
             configPath = open(path + 'config.json','r')
             config = json.load(configPath)
@@ -84,7 +84,7 @@ def main(useModel=True):
         task = 'triggers'
         print("----------------------------------------------------")
         print(task)
-        path = 'Models/' + language + '/' + task + '/'
+        path = 'Models_REDUCED/' + language + '/' + task + '/'
         bio = []
         if(useModel):
             configPath = open(path + 'config.json','r')
@@ -121,7 +121,7 @@ def main(useModel=True):
         task = 'arguments'
         print("----------------------------------------------------")
         print(task)
-        test = 'MEE_BIO/' + language + '/test_arg.json'
+        test = 'MEE_BIO_REDUCED/' + language + '/test_arg.json'
         testR =  open(test, "r")
         tokensArgGold = []
         arguments = []
@@ -138,7 +138,7 @@ def main(useModel=True):
             else:
                 linesGold.append(data['lineAll'])
         testR.close()
-        path = 'Models/' + language + '/' + task + '/'
+        path = 'Models_REDUCED/' + language + '/' + task + '/'
         bio = []
 
 
@@ -174,7 +174,7 @@ def main(useModel=True):
 
 
     
-    csvFile = open("Test/test.csv","w")
+    csvFile = open("Test/Reduced/test.csv","w")
     csvTest = csv.writer(csvFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     csvTest.writerow(languages)
     csvTest.writerow(accuracyEntity)

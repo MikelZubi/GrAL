@@ -2,11 +2,14 @@ import os
 import json
 import shutil
 import copy as cp
+import random as rd
 
 def main():
-    directoryR = 'MEE'
-    directoryW = 'MEE_BIO'
+    reduce()
+    directoryR = 'MEE_REDUCED'
+    directoryW = 'MEE_BIO_REDUCED'
     hasieratu()
+
     for language in os.listdir(directoryR):
         pathR = directoryR + '/' + language
         pathW = directoryW + '/' + language
@@ -18,8 +21,8 @@ def main():
 
 
 def translate(filenameR, filenameW,filetype):
-    allPath = 'MEE_BIO/all/'+filetype
-    allPathArg = 'MEE_BIO/all/'+filetype.split(".")[0] + "_arg" + ".json"
+    allPath = 'MEE_BIO_REDUCED/all/'+filetype
+    allPathArg = 'MEE_BIO_REDUCED/all/'+filetype.split(".")[0] + "_arg" + ".json"
     argFileW = filenameW.split(".")[0] + "_arg" + ".json"
     os.makedirs(os.path.dirname(filenameW), exist_ok=True)
     os.makedirs(os.path.dirname(argFileW), exist_ok=True)
@@ -149,7 +152,7 @@ def translate(filenameR, filenameW,filetype):
     jsonAllArg.close()
 
 def hasieratu():
-    dirpath = os.path.join('MEE_BIO')
+    dirpath = os.path.join('MEE_BIO_REDUCED')
     if os.path.exists(dirpath):
         shutil.rmtree(dirpath)
 
@@ -164,6 +167,53 @@ def getStartEnd(tokens):
     return start, end
 
 
+def reduce():
+    directoryR = 'MEE'
+    directoryW = 'MEE_REDUCED'
+    dirpath = os.path.join(directoryW)
+    if os.path.exists(dirpath):
+        shutil.rmtree(dirpath)
+    rd.seed(16)
+    notRed = ['hindi','japanese','korean','portuguese']
+    for language in os.listdir(directoryR):
+        pathR = directoryR + '/' + language
+        pathW = directoryW + '/' + language
+        if language in notRed:
+            shutil.copytree(pathR,pathW)
+            continue
+        for file in os.listdir(directoryR + '/' + language):
+            if file == 'train.jsonl':
+                numlines = 1200
+            else:
+                numlines = 150
+            fileR = pathR + '/' + file
+            fileW = pathW + '/' + file
+            jsonR = open(fileR, "r")
+            os.makedirs(os.path.dirname(fileW), exist_ok=True)
+            jsonW = open(fileW,'w')
+            argLines = []
+            othLines = []
+            for i,line in enumerate(jsonR):
+                #print(line)
+                data = json.loads(line)
+                if data["arguments"] != []:
+                    argLines.append(i)
+                else:
+                    othLines.append(i)
+            if len(argLines) >= numlines:
+                selected = rd.sample(argLines,numlines)
+            else:
+                selected = rd.sample(argLines,len(argLines))
+                selected += rd.sample(othLines,numlines-len(argLines))
+            jsonR.seek(0)
+            for i,line in enumerate(jsonR):
+                if i in selected:
+                    jsonW.write(line)
+            jsonW.close()
 
+
+            
+    
+    #TODO 
 if __name__ == "__main__":
     main()

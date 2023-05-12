@@ -10,7 +10,7 @@ from seqeval.metrics import accuracy_score
 
 
 
-def main(useModel=True):
+def main(cross="english"):
     accuracyEntity=["Accuracy Entity"]
     f1Entity = ["F1 Entity"]
     accuracyTriggers=["Accuracy Triggers"]
@@ -18,13 +18,12 @@ def main(useModel=True):
     accuracyArguments=["Accuracy Arguments"]
     f1ArgumentsGold=["F1 Arguments"]
     languages = [""]
-    if useModel:
-        device = torch.device(type='cuda',index=0)
+    device = torch.device(type='cuda',index=0)
     for language in os.listdir('Models'):
         languages.append(language)
         print("****************************************************")
         print(language)
-        test = 'MEE_BIO/' + language + '/test.json'
+        test = 'MEE_BIO_REDUCED/' + cross + '/test.json'
         testR =  open(test, "r")
         tokens = []
         entity = []
@@ -47,31 +46,26 @@ def main(useModel=True):
         task = 'entity'
         print("----------------------------------------------------")
         print(task)
-        path = 'Models/' + language + '/' + task + '/'
-        if(useModel):
-            configPath = open(path + 'config.json','r')
-            config = json.load(configPath)
-            model = XLMRobertaForTokenClassification.from_pretrained(path)
-            model = model.to(device)
-            model.eval()
-            tokenizer = AutoTokenizer.from_pretrained('xlm-roberta-base',use_fast=True)
-            bio = []
-            for z in range(len(tokens)):
-                tokenized_input, labels = tokenize_and_align_labels([tokens[z]],tokenizer,device)
-                out = model(**tokenized_input)['logits']
-                maxout = torch.argmax(out,dim=2)
-                maxout = maxout.to('cpu')
-                maxoutnp = maxout.numpy()
-                for i in range(len(maxoutnp)):
-                    bioT = []
-                    for j in range(len(maxoutnp[i])):
-                        if labels[i][j] != -100:
-                            bioT.append(config['id2label'][str(maxoutnp[i][j])])
-                    bio.append(bioT)
-        else:
-            result = open(path+"predictions.txt")
-            lines = result.readlines()
-            bio = [line.split(" ") for line in lines]
+        path = 'Models_REDUCED/' + language + '/' + task + '/'
+        configPath = open(path + 'config.json','r')
+        config = json.load(configPath)
+        model = XLMRobertaForTokenClassification.from_pretrained(path)
+        model = model.to(device)
+        model.eval()
+        tokenizer = AutoTokenizer.from_pretrained('xlm-roberta-base',use_fast=True)
+        bio = []
+        for z in range(len(tokens)):
+            tokenized_input, labels = tokenize_and_align_labels([tokens[z]],tokenizer,device)
+            out = model(**tokenized_input)['logits']
+            maxout = torch.argmax(out,dim=2)
+            maxout = maxout.to('cpu')
+            maxoutnp = maxout.numpy()
+            for i in range(len(maxoutnp)):
+                bioT = []
+                for j in range(len(maxoutnp[i])):
+                    if labels[i][j] != -100:
+                        bioT.append(config['id2label'][str(maxoutnp[i][j])])
+                bio.append(bioT)
         
         f1 = f1_score(entity,bio,zero_division='0')
         accuracy = accuracy_score(entity,bio)
@@ -84,31 +78,26 @@ def main(useModel=True):
         task = 'triggers'
         print("----------------------------------------------------")
         print(task)
-        path = 'Models/' + language + '/' + task + '/'
+        path = 'Models_REDUCED/' + language + '/' + task + '/'
         bio = []
-        if(useModel):
-            configPath = open(path + 'config.json','r')
-            config = json.load(configPath)
-            model = XLMRobertaForTokenClassification.from_pretrained(path)
-            model = model.to(device)
-            model.eval()
-            tokenizer = AutoTokenizer.from_pretrained('xlm-roberta-base',use_fast=True)
-            for z in range(len(tokens)):
-                tokenized_input, labels = tokenize_and_align_labels([tokens[z]],tokenizer,device)
-                out = model(**tokenized_input)['logits']
-                maxout = torch.argmax(out,dim=2)
-                maxout = maxout.to('cpu')
-                maxoutnp = maxout.numpy()
-                for i in range(len(maxoutnp)):
-                    bioT = []
-                    for j in range(len(maxoutnp[i])):
-                        if labels[i][j] != -100:
-                            bioT.append(config['id2label'][str(maxoutnp[i][j])])
-                    bio.append(bioT)
-        else:
-            result = open(path+"predictions.txt")
-            lines = result.readlines()
-            bio = [line.split(" ") for line in lines]
+        configPath = open(path + 'config.json','r')
+        config = json.load(configPath)
+        model = XLMRobertaForTokenClassification.from_pretrained(path)
+        model = model.to(device)
+        model.eval()
+        tokenizer = AutoTokenizer.from_pretrained('xlm-roberta-base',use_fast=True)
+        for z in range(len(tokens)):
+            tokenized_input, labels = tokenize_and_align_labels([tokens[z]],tokenizer,device)
+            out = model(**tokenized_input)['logits']
+            maxout = torch.argmax(out,dim=2)
+            maxout = maxout.to('cpu')
+            maxoutnp = maxout.numpy()
+            for i in range(len(maxoutnp)):
+                bioT = []
+                for j in range(len(maxoutnp[i])):
+                    if labels[i][j] != -100:
+                        bioT.append(config['id2label'][str(maxoutnp[i][j])])
+                bio.append(bioT)
 
         f1 = f1_score(triggers,bio,zero_division='0')
         accuracy = accuracy_score(triggers,bio)
@@ -121,7 +110,7 @@ def main(useModel=True):
         task = 'arguments'
         print("----------------------------------------------------")
         print(task)
-        test = 'MEE_BIO/' + language + '/test_arg.json'
+        test = 'MEE_BIO_REDUCED/' + cross + '/test_arg.json'
         testR =  open(test, "r")
         tokensArgGold = []
         arguments = []
@@ -138,43 +127,37 @@ def main(useModel=True):
             else:
                 linesGold.append(data['lineAll'])
         testR.close()
-        path = 'Models/' + language + '/' + task + '/'
+        path = 'Models_REDUCED/' + language + '/' + task + '/'
         bio = []
-
-
-        if(useModel):
-            configPath = open(path + 'config.json','r')
-            config = json.load(configPath)
-            model = XLMRobertaForTokenClassification.from_pretrained(path)
-            model = model.to(device)
-            model.eval()
-            tokenizer = AutoTokenizer.from_pretrained('xlm-roberta-base',use_fast=True) 
-            for z in range(len(linesGold)):
-                tokenized_input, labels = tokenize_and_align_labels([tokensArgGold[z]],tokenizer,device)
-                out = model(**tokenized_input)['logits']
-                maxout = torch.argmax(out,dim=2)
-                maxout = maxout.to('cpu')
-                maxoutnp = maxout.numpy()
-                for i in range(len(maxoutnp)):
-                    bioT = []
-                    for j in range(len(maxoutnp[i])):
-                        if labels[i][j] != -100:
-                            bioT.append(config['id2label'][str(maxoutnp[i][j])])
-                    bio.append(bioT)
-                
-        else:
-            result = open(path+"predictions.txt")
-            lines = result.readlines()
-            bio = [line.split(" ") for line in lines]
+        configPath = open(path + 'config.json','r')
+        config = json.load(configPath)
+        model = XLMRobertaForTokenClassification.from_pretrained(path)
+        model = model.to(device)
+        model.eval()
+        tokenizer = AutoTokenizer.from_pretrained('xlm-roberta-base',use_fast=True) 
+        for z in range(len(linesGold)):
+            tokenized_input, labels = tokenize_and_align_labels([tokensArgGold[z]],tokenizer,device)
+            out = model(**tokenized_input)['logits']
+            maxout = torch.argmax(out,dim=2)
+            maxout = maxout.to('cpu')
+            maxoutnp = maxout.numpy()
+            for i in range(len(maxoutnp)):
+                bioT = []
+                for j in range(len(maxoutnp[i])):
+                    if labels[i][j] != -100:
+                        bioT.append(config['id2label'][str(maxoutnp[i][j])])
+                bio.append(bioT)
         
+            
+    
+    
         f1 = f1_score(arguments,bio,zero_division='0')
         accuracy = accuracy_score(arguments,bio)
         accuracyArguments.append(str(round(accuracy,2)))
         f1ArgumentsGold.append(str(round(f1,2)))
-
-
     
-    csvFile = open("Test/test.csv","w")
+    file = "Test/Reduced/test_" + cross + ".csv"
+    csvFile = open(file,"w")
     csvTest = csv.writer(csvFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     csvTest.writerow(languages)
     csvTest.writerow(accuracyEntity)
@@ -184,7 +167,6 @@ def main(useModel=True):
     csvTest.writerow(accuracyArguments)
     csvTest.writerow(f1ArgumentsGold)
     csvFile.close()
-
 
 
 # Tokenize all texts and align the labels with them.
@@ -210,7 +192,7 @@ def tokenize_and_align_labels(examples,tokenizer,device):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1 and str(sys.argv[1])=="usePredict":
-        main(useModel=False)
+    if len(sys.argv) > 1:
+        main(cross=sys.argv[1])
     else:
         main()

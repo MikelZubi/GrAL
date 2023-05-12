@@ -2,28 +2,32 @@ from transformers import XLMRobertaForTokenClassification,  AutoTokenizer
 import torch
 import os
 import json
-import copy as cp
 import csv
 import sys
-from seqeval.metrics import f1_score
-from seqeval.metrics import accuracy_score
+from seqeval.metrics import f1_score, accuracy_score, recall_score, precision_score
 
 
 
-def main(cross="english"):
+def main(seed="42"):
     accuracyEntity=["Accuracy Entity"]
     f1Entity = ["F1 Entity"]
+    recallEntity = ["Recall Entity"]
+    precisionEntity = ["Precision Entity"]
     accuracyTriggers=["Accuracy Triggers"]
     f1Triggers=["F1 Triggers"]
+    recallTriggers = ["Recall Triggers"]
+    precisionTriggers = ["Precision Triggers"]
     accuracyArguments=["Accuracy Arguments"]
     f1ArgumentsGold=["F1 Arguments"]
+    recallArguments = ["Recall Arguments"]
+    precisionArguments = ["Precision Arguments"]
     languages = [""]
     device = torch.device(type='cuda',index=0)
-    for language in os.listdir('Models'):
+    for language in os.listdir('Models_REDUCED2'):
         languages.append(language)
         print("****************************************************")
         print(language)
-        test = 'MEE_BIO/' + cross + '/test.json'
+        test = 'Eus/test.json'
         testR =  open(test, "r")
         tokens = []
         entity = []
@@ -46,7 +50,7 @@ def main(cross="english"):
         task = 'entity'
         print("----------------------------------------------------")
         print(task)
-        path = 'Models/' + language + '/' + task + '/'
+        path = 'Models_REDUCED2/' + language + '/' + task + '/'
         configPath = open(path + 'config.json','r')
         config = json.load(configPath)
         model = XLMRobertaForTokenClassification.from_pretrained(path)
@@ -68,8 +72,12 @@ def main(cross="english"):
                 bio.append(bioT)
         
         f1 = f1_score(entity,bio,zero_division='0')
+        precision = precision_score(entity,bio)
+        recall = recall_score(entity,bio)
         accuracy = accuracy_score(entity,bio)
         accuracyEntity.append(str(round(accuracy,2)))
+        precisionEntity.append(str(round(precision,2)))
+        recallEntity.append(str(round(recall,2)))
         f1Entity.append(str(round(f1,2)))
 
 
@@ -78,7 +86,7 @@ def main(cross="english"):
         task = 'triggers'
         print("----------------------------------------------------")
         print(task)
-        path = 'Models/' + language + '/' + task + '/'
+        path = 'Models_REDUCED2/' + language + '/' + task + '/'
         bio = []
         configPath = open(path + 'config.json','r')
         config = json.load(configPath)
@@ -100,8 +108,12 @@ def main(cross="english"):
                 bio.append(bioT)
 
         f1 = f1_score(triggers,bio,zero_division='0')
+        precision = precision_score(triggers,bio)
+        recall = recall_score(triggers,bio)
         accuracy = accuracy_score(triggers,bio)
         accuracyTriggers.append(str(round(accuracy,2)))
+        precisionTriggers.append(str(round(precision,2)))
+        recallTriggers.append(str(round(recall,2)))
         f1Triggers.append(str(round(f1,2)))
 
     
@@ -110,7 +122,7 @@ def main(cross="english"):
         task = 'arguments'
         print("----------------------------------------------------")
         print(task)
-        test = 'MEE_BIO/' + cross + '/test_arg.json'
+        test = 'Eus/test_arg.json'
         testR =  open(test, "r")
         tokensArgGold = []
         arguments = []
@@ -127,7 +139,7 @@ def main(cross="english"):
             else:
                 linesGold.append(data['lineAll'])
         testR.close()
-        path = 'Models/' + language + '/' + task + '/'
+        path = 'Models_REDUCED2/' + language + '/' + task + '/'
         bio = []
         configPath = open(path + 'config.json','r')
         config = json.load(configPath)
@@ -152,20 +164,31 @@ def main(cross="english"):
     
     
         f1 = f1_score(arguments,bio,zero_division='0')
+        precision = precision_score(arguments,bio)
+        recall = recall_score(arguments,bio)
         accuracy = accuracy_score(arguments,bio)
         accuracyArguments.append(str(round(accuracy,2)))
         f1ArgumentsGold.append(str(round(f1,2)))
-    
-    file = "Test/test_" + cross + ".csv"
+        precisionArguments.append(str(round(precision,2)))
+        recallArguments.append(str(round(recall,2)))
+
+    file = "Test/Reduced2/seed"+ str(seed) + "/test_Euskera.csv"
+    os.makedirs(os.path.dirname(file), exist_ok=True)
     csvFile = open(file,"w")
     csvTest = csv.writer(csvFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     csvTest.writerow(languages)
     csvTest.writerow(accuracyEntity)
     csvTest.writerow(f1Entity)
+    csvTest.writerow(precisionEntity)
+    csvTest.writerow(recallEntity)
     csvTest.writerow(accuracyTriggers)
     csvTest.writerow(f1Triggers)
+    csvTest.writerow(precisionTriggers)
+    csvTest.writerow(recallTriggers)
     csvTest.writerow(accuracyArguments)
     csvTest.writerow(f1ArgumentsGold)
+    csvTest.writerow(precisionArguments)
+    csvTest.writerow(recallArguments)
     csvFile.close()
 
 
@@ -193,6 +216,6 @@ def tokenize_and_align_labels(examples,tokenizer,device):
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        main(cross=sys.argv[1])
+        main(seed=sys.argv[1])
     else:
         main()

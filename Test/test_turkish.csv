@@ -1,0 +1,7 @@
+,all,english,polish,spanish,portuguese,japanese,hindi,korean,turkish
+Accuracy Entity,0.93,0.9,0.9,0.9,0.84,0.83,0.88,0.9,0.93
+F1 Entity,0.73,0.61,0.61,0.62,0.51,0.44,0.58,0.62,0.72
+Accuracy Triggers,0.98,0.98,0.97,0.97,0.97,0.96,0.97,0.97,0.98
+F1 Triggers,0.6,0.55,0.47,0.53,0.38,0.21,0.3,0.29,0.59
+Accuracy Arguments,0.95,0.91,0.89,0.92,0.9,0.93,0.94,0.92,0.94
+F1 Arguments,0.35,0.2,0.15,0.04,0.22,0.16,0.14,0.09,0.23
