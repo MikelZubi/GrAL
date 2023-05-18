@@ -43,8 +43,8 @@ dataStd[12] = ["Precision Arguments"]
 for i in range(1,len(Array2d_result3)):
     for j in range(len(data16[i-1])):
         array = np.array([data16[i-1,j],data44[i-1,j],data85[i-1,j]])
-        dataAvg[i].append(np.mean(array,dtype=float))
-        dataStd[i].append(np.std(array,dtype=float))
+        dataAvg[i].append(round(np.mean(array,dtype=float),2))
+        dataStd[i].append(round(np.std(array,dtype=float),2))
 fileAvg = "Test/Reduced2/test_Avg.csv"
 os.makedirs(os.path.dirname(fileAvg), exist_ok=True)
 csvFileAvg = open(fileAvg,"w")
