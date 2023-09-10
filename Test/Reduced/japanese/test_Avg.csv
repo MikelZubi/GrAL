@@ -1,0 +1,10 @@
+,portuguese,hindi,english,polish,turkish,spanish,all,korean
+F1 Entity,0.27,0.35,0.29,0.31,0.33,0.28,0.41,0.37
+Precision Entity,0.24,0.37,0.33,0.34,0.36,0.29,0.41,0.37
+Recall Entity,0.31,0.34,0.26,0.28,0.31,0.27,0.41,0.37
+F1 Triggers,0.0,0.04,0.01,0.0,0.01,0.0,0.12,0.06
+Precision Triggers,0.0,0.28,0.1,0.0,0.09,0.05,0.22,0.14
+Recall Triggers,0.0,0.02,0.01,0.0,0.0,0.0,0.09,0.04
+F1 Arguments,0.19,0.17,0.14,0.17,0.2,0.0,0.22,0.17
+Precision Arguments,0.26,0.23,0.16,0.21,0.22,0.0,0.22,0.18
+Recall Arguments,0.17,0.14,0.13,0.14,0.19,0.0,0.21,0.17

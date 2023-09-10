@@ -1,0 +1,190 @@
+seed,task,train_lang,morph,morph-syn,order,script,geo,metric,score
+16,Entity,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.45
+16,Entity,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.36
+16,Entity,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.62
+16,Triggers,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.36
+16,Triggers,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.29
+16,Triggers,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.46
+16,Arguments,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.12
+16,Arguments,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.08
+16,Arguments,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.23
+16,Entity,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.48
+16,Entity,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.4
+16,Entity,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.62
+16,Triggers,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.36
+16,Triggers,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.3
+16,Triggers,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.46
+16,Arguments,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.02
+16,Arguments,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.03
+16,Arguments,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.01
+16,Entity,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.41
+16,Entity,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.31
+16,Entity,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.61
+16,Triggers,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.29
+16,Triggers,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.3
+16,Triggers,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.29
+16,Arguments,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.1
+16,Arguments,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.06
+16,Arguments,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.21
+16,Entity,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,F1,0.49
+16,Entity,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,Precision,0.42
+16,Entity,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,Recall,0.59
+16,Triggers,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,F1,0.27
+16,Triggers,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,Precision,0.23
+16,Triggers,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,Recall,0.32
+16,Arguments,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,F1,0.09
+16,Arguments,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,Precision,0.06
+16,Arguments,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,Recall,0.15
+16,Entity,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,F1,0.5
+16,Entity,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,Precision,0.41
+16,Entity,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,Recall,0.63
+16,Triggers,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,F1,0.36
+16,Triggers,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,Precision,0.28
+16,Triggers,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,Recall,0.5
+16,Arguments,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,F1,0.16
+16,Arguments,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,Precision,0.13
+16,Arguments,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,Recall,0.2
+16,Entity,hindi,fusional,Split Ergative,SOV,Devanagari,India,F1,0.48
+16,Entity,hindi,fusional,Split Ergative,SOV,Devanagari,India,Precision,0.41
+16,Entity,hindi,fusional,Split Ergative,SOV,Devanagari,India,Recall,0.59
+16,Triggers,hindi,fusional,Split Ergative,SOV,Devanagari,India,F1,0.32
+16,Triggers,hindi,fusional,Split Ergative,SOV,Devanagari,India,Precision,0.31
+16,Triggers,hindi,fusional,Split Ergative,SOV,Devanagari,India,Recall,0.34
+16,Arguments,hindi,fusional,Split Ergative,SOV,Devanagari,India,F1,0.09
+16,Arguments,hindi,fusional,Split Ergative,SOV,Devanagari,India,Precision,0.1
+16,Arguments,hindi,fusional,Split Ergative,SOV,Devanagari,India,Recall,0.08
+16,Entity,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,F1,0.4
+16,Entity,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,Precision,0.33
+16,Entity,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,Recall,0.52
+16,Triggers,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,F1,0.34
+16,Triggers,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,Precision,0.34
+16,Triggers,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,Recall,0.35
+16,Arguments,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,F1,0.23
+16,Arguments,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,Precision,0.19
+16,Arguments,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,Recall,0.3
+44,Entity,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.46
+44,Entity,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.36
+44,Entity,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.61
+44,Triggers,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.32
+44,Triggers,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.33
+44,Triggers,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.31
+44,Arguments,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.13
+44,Arguments,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.1
+44,Arguments,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.18
+44,Entity,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.47
+44,Entity,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.38
+44,Entity,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.63
+44,Triggers,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.31
+44,Triggers,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.24
+44,Triggers,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.44
+44,Arguments,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.02
+44,Arguments,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.04
+44,Arguments,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.02
+44,Entity,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.4
+44,Entity,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.31
+44,Entity,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.59
+44,Triggers,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.27
+44,Triggers,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.24
+44,Triggers,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.31
+44,Arguments,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.13
+44,Arguments,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.09
+44,Arguments,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.22
+44,Entity,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,F1,0.46
+44,Entity,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,Precision,0.38
+44,Entity,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,Recall,0.6
+44,Triggers,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,F1,0.34
+44,Triggers,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,Precision,0.25
+44,Triggers,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,Recall,0.5
+44,Arguments,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,F1,0.17
+44,Arguments,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,Precision,0.12
+44,Arguments,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,Recall,0.27
+44,Entity,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,F1,0.52
+44,Entity,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,Precision,0.44
+44,Entity,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,Recall,0.63
+44,Triggers,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,F1,0.32
+44,Triggers,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,Precision,0.25
+44,Triggers,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,Recall,0.44
+44,Arguments,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,F1,0.12
+44,Arguments,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,Precision,0.1
+44,Arguments,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,Recall,0.17
+44,Entity,hindi,fusional,Split Ergative,SOV,Devanagari,India,F1,0.48
+44,Entity,hindi,fusional,Split Ergative,SOV,Devanagari,India,Precision,0.41
+44,Entity,hindi,fusional,Split Ergative,SOV,Devanagari,India,Recall,0.57
+44,Triggers,hindi,fusional,Split Ergative,SOV,Devanagari,India,F1,0.26
+44,Triggers,hindi,fusional,Split Ergative,SOV,Devanagari,India,Precision,0.28
+44,Triggers,hindi,fusional,Split Ergative,SOV,Devanagari,India,Recall,0.24
+44,Arguments,hindi,fusional,Split Ergative,SOV,Devanagari,India,F1,0.13
+44,Arguments,hindi,fusional,Split Ergative,SOV,Devanagari,India,Precision,0.14
+44,Arguments,hindi,fusional,Split Ergative,SOV,Devanagari,India,Recall,0.12
+44,Entity,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,F1,0.42
+44,Entity,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,Precision,0.35
+44,Entity,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,Recall,0.53
+44,Triggers,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,F1,0.21
+44,Triggers,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,Precision,0.22
+44,Triggers,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,Recall,0.19
+44,Arguments,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,F1,0.17
+44,Arguments,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,Precision,0.14
+44,Arguments,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,Recall,0.21
+85,Entity,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.47
+85,Entity,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.38
+85,Entity,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.63
+85,Triggers,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.37
+85,Triggers,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.32
+85,Triggers,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.43
+85,Arguments,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.17
+85,Arguments,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.12
+85,Arguments,english,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.3
+85,Entity,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.47
+85,Entity,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.38
+85,Entity,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.63
+85,Triggers,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.31
+85,Triggers,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.24
+85,Triggers,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.44
+85,Arguments,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.02
+85,Arguments,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.04
+85,Arguments,spanish,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.02
+85,Entity,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.4
+85,Entity,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.31
+85,Entity,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.59
+85,Triggers,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.27
+85,Triggers,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.24
+85,Triggers,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.31
+85,Arguments,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,F1,0.13
+85,Arguments,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Precision,0.09
+85,Arguments,portuguese,fusional,Nominative-Accusative,SVO,Latin,West_Europe,Recall,0.22
+85,Entity,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,F1,0.49
+85,Entity,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,Precision,0.41
+85,Entity,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,Recall,0.61
+85,Triggers,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,F1,0.27
+85,Triggers,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,Precision,0.23
+85,Triggers,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,Recall,0.34
+85,Arguments,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,F1,0.16
+85,Arguments,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,Precision,0.1
+85,Arguments,polish,fusional,Nominative-Accusative,SVO,Latin,East_Europe,Recall,0.32
+85,Entity,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,F1,0.52
+85,Entity,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,Precision,0.44
+85,Entity,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,Recall,0.63
+85,Triggers,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,F1,0.32
+85,Triggers,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,Precision,0.25
+85,Triggers,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,Recall,0.44
+85,Arguments,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,F1,0.12
+85,Arguments,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,Precision,0.1
+85,Arguments,turkish,agglutinative,Nominative-Accusative,SOV,Latin,East_Europe\West_Asia,Recall,0.17
+85,Entity,hindi,fusional,Split Ergative,SOV,Devanagari,India,F1,0.48
+85,Entity,hindi,fusional,Split Ergative,SOV,Devanagari,India,Precision,0.41
+85,Entity,hindi,fusional,Split Ergative,SOV,Devanagari,India,Recall,0.57
+85,Triggers,hindi,fusional,Split Ergative,SOV,Devanagari,India,F1,0.32
+85,Triggers,hindi,fusional,Split Ergative,SOV,Devanagari,India,Precision,0.26
+85,Triggers,hindi,fusional,Split Ergative,SOV,Devanagari,India,Recall,0.43
+85,Arguments,hindi,fusional,Split Ergative,SOV,Devanagari,India,F1,0.09
+85,Arguments,hindi,fusional,Split Ergative,SOV,Devanagari,India,Precision,0.1
+85,Arguments,hindi,fusional,Split Ergative,SOV,Devanagari,India,Recall,0.08
+85,Entity,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,F1,0.43
+85,Entity,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,Precision,0.35
+85,Entity,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,Recall,0.54
+85,Triggers,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,F1,0.18
+85,Triggers,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,Precision,0.17
+85,Triggers,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,Recall,0.19
+85,Arguments,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,F1,0.21
+85,Arguments,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,Precision,0.18
+85,Arguments,japanese,agglutinative,Nominative-Accusative,SOV,Kanji\Kana,East_Asia,Recall,0.26
