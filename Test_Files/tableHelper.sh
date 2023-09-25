@@ -1,5 +1,6 @@
-for dir in Test/Reduced3/*/
+
+for dir in ../Test/Reduced/*/
 do
     language=$(basename "$dir")
-    python makeTableRed3.py $language
+    python makeTableRed.py $language
 done

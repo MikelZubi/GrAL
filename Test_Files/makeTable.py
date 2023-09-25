@@ -16,9 +16,9 @@ lang = ["english","spanish","portuguese","polish","turkish","hindi","japanese","
 head = ["seed","task","cross","train_lang","morphC","morphT","morph-synC","morph-synT","orderC","orderT","scriptC","scriptT","geoC","geoT","metric","score"]
 rows = []
 
-for cross in os.listdir('Test/Reduced'):
+for cross in os.listdir('../Test/Reduced'):
 
-    seed16 = pandas.read_csv("Test/Reduced/"+cross+"/seed16/test.csv",header=0,index_col=0)
+    seed16 = pandas.read_csv("../Test/Reduced/"+cross+"/seed16/test.csv",header=0,index_col=0)
     for language in lang:
         if language == cross:
             continue
@@ -29,7 +29,7 @@ for cross in os.listdir('Test/Reduced'):
                 row = ["16",task,cross,language,morph[cross],morph[language],morphS[cross],morphS[language],order[cross],order[language],script[cross],script[language],geo[cross],geo[language],metric,score]
                 rows.append(cp.deepcopy(row))
 
-    seed44 = pandas.read_csv("Test/Reduced/"+cross+"/seed44/test.csv",header=0,index_col=0)
+    seed44 = pandas.read_csv("../Test/Reduced/"+cross+"/seed44/test.csv",header=0,index_col=0)
     for language in lang:
         if language == cross:
             continue
@@ -40,7 +40,7 @@ for cross in os.listdir('Test/Reduced'):
                 row = ["44",task,cross,language,morph[cross],morph[language],morphS[cross],morphS[language],order[cross],order[language],script[cross],script[language],geo[cross],geo[language],metric,score]
                 rows.append(cp.deepcopy(row))
 
-    seed85 = pandas.read_csv("Test/Reduced/"+cross+"/seed85/test.csv",header=0,index_col=0)
+    seed85 = pandas.read_csv("../Test/Reduced/"+cross+"/seed85/test.csv",header=0,index_col=0)
     for language in lang:
         if language == cross:
             continue
@@ -51,7 +51,7 @@ for cross in os.listdir('Test/Reduced'):
                 row = ["85",task,cross,language,morph[cross],morph[language],morphS[cross],morphS[language],order[cross],order[language],script[cross],script[language],geo[cross],geo[language],metric,score]
                 rows.append(cp.deepcopy(row))
         
-file = "Test/Reduced/table.csv"
+file = "../Test/Reduced/table.csv"
 os.makedirs(os.path.dirname(file), exist_ok=True)
 csvFile = open(file,"w")
 csvTable = csv.writer(csvFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -59,5 +59,4 @@ csvTable.writerow(head)
 for row in rows:
     csvTable.writerow(row)
 csvFile.close()
-
 

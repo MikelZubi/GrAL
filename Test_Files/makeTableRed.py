@@ -19,7 +19,7 @@ lang = ["english","spanish","portuguese","polish","turkish","hindi","japanese","
 head = ["seed","task","train_lang","morph","morph-syn","order","script","geo","metric","score"]
 rows = []
 
-seed16 = pandas.read_csv("Test/Reduced3/"+cross+"/seed16/test.csv",header=0,index_col=0)
+seed16 = pandas.read_csv("../Test/Reduced/"+cross+"/seed16/test.csv",header=0,index_col=0)
 for language in lang:
     if language == cross:
         continue
@@ -30,7 +30,7 @@ for language in lang:
             row = ["16",task,language,morph[language],morphS[language],order[language],script[language],geo[language],metric,score]
             rows.append(cp.deepcopy(row))
 
-seed44 = pandas.read_csv("Test/Reduced3/"+cross+"/seed44/test.csv",header=0,index_col=0)
+seed44 = pandas.read_csv("../Test/Reduced/"+cross+"/seed44/test.csv",header=0,index_col=0)
 for language in lang:
     if language == cross:
         continue
@@ -41,7 +41,7 @@ for language in lang:
             row = ["44",task,language,morph[language],morphS[language],order[language],script[language],geo[language],metric,score]
             rows.append(cp.deepcopy(row))
 
-seed85 = pandas.read_csv("Test/Reduced3/"+cross+"/seed85/test.csv",header=0,index_col=0)
+seed85 = pandas.read_csv("../Test/Reduced/"+cross+"/seed85/test.csv",header=0,index_col=0)
 for language in lang:
     if language == cross:
         continue
@@ -52,7 +52,7 @@ for language in lang:
             row = ["85",task,language,morph[language],morphS[language],order[language],script[language],geo[language],metric,score]
             rows.append(cp.deepcopy(row))
     
-file = "Test/Reduced3/"+cross+"/table.csv"
+file = "../Test/Reduced/"+cross+"/table.csv"
 os.makedirs(os.path.dirname(file), exist_ok=True)
 csvFile = open(file,"w")
 csvTable = csv.writer(csvFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)

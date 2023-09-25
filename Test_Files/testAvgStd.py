@@ -1,9 +1,9 @@
 import numpy as np
 import csv
 import os
-for cross in os.listdir("Test/Reduced"):
+for cross in os.listdir("../Test/Reduced"):
 
-    CSVData1 = open("Test/Reduced/"+ cross +"/seed16/test.csv")
+    CSVData1 = open("../Test/Reduced/"+ cross +"/seed16/test.csv")
     print(cross)
     reader = csv.reader(CSVData1,delimiter=",")
     for row in reader:
@@ -12,7 +12,7 @@ for cross in os.listdir("Test/Reduced"):
 
     Array2d_result1 = np.genfromtxt(CSVData1, delimiter=",")
     data16 = Array2d_result1[0:,1:]
-    CSVData2 = open("Test/Reduced/"+ cross +"/seed44/test.csv")
+    CSVData2 = open("../Test/Reduced/"+ cross +"/seed44/test.csv")
 
     reader2 = csv.reader(CSVData2, delimiter=",")
     for row in reader2:
@@ -21,7 +21,7 @@ for cross in os.listdir("Test/Reduced"):
 
     Array2d_result2 = np.genfromtxt(CSVData2, delimiter=",")
     data44 = Array2d_result2[0:,1:]
-    CSVData3 = open("Test/Reduced/"+ cross +"/seed85/test.csv")
+    CSVData3 = open("../Test/Reduced/"+ cross +"/seed85/test.csv")
 
     reader3 = csv.reader(CSVData3, delimiter=",")
     for row in reader3:
@@ -60,9 +60,9 @@ for cross in os.listdir("Test/Reduced"):
     for i in range(1,len(dataAvg)):
         for j in range(len(data16[i-1])):
             array = np.array([data16[i-1,j],data44[i-1,j],data85[i-1,j]])
-            dataAvg[i].append(round(np.mean(array,dtype=float),2))
-            dataStd[i].append(round(np.std(array,dtype=float),2))
-    fileAvg = "Test/Reduced/"+cross+"/test_Avg.csv"
+            dataAvg[i].append(round(np.mean(array,dtype=float),4)*100)
+            dataStd[i].append(round(np.std(array,dtype=float),4)*100)
+    fileAvg = "../Test/Reduced/"+cross+"/test_Avg.csv"
     os.makedirs(os.path.dirname(fileAvg), exist_ok=True)
     csvFileAvg = open(fileAvg,"w")
     csvAvg = csv.writer(csvFileAvg, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -70,7 +70,7 @@ for cross in os.listdir("Test/Reduced"):
         csvAvg.writerow(dataAvg[i])
     csvFileAvg.close()
 
-    fileStd = "Test/Reduced/"+cross+"/test_Std.csv"
+    fileStd = "../Test/Reduced/"+cross+"/test_Std.csv"
     os.makedirs(os.path.dirname(fileStd), exist_ok=True)
     csvFileStd = open(fileStd,"w")
     csvStd = csv.writer(csvFileStd, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
