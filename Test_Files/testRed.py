@@ -20,7 +20,7 @@ def main(cross,seed="42"):
     precisionArguments = ["Precision Arguments"]
     languages = [""]
     device = torch.device(type='cuda',index=0)
-    for language in os.listdir('Models_REDUCED3'):
+    for language in os.listdir('Models_REDUCED'):
         languages.append(language)
         print("****************************************************")
         print(language)
@@ -47,7 +47,7 @@ def main(cross,seed="42"):
         task = 'entity'
         print("----------------------------------------------------")
         print(task)
-        path = 'Models_REDUCED3/' + language + '/' + task + '/'
+        path = 'Models_REDUCED/' + language + '/' + task + '/'
         configPath = open(path + 'config.json','r')
         config = json.load(configPath)
         model = XLMRobertaForTokenClassification.from_pretrained(path)
@@ -71,9 +71,9 @@ def main(cross,seed="42"):
         f1 = f1_score(entity,bio,zero_division='0')
         precision = precision_score(entity,bio)
         recall = recall_score(entity,bio)
-        precisionEntity.append(str(round(precision,2)))
-        recallEntity.append(str(round(recall,2)))
-        f1Entity.append(str(round(f1,2)))
+        precisionEntity.append(str(precision,2))
+        recallEntity.append(str(recall,2))
+        f1Entity.append(str(f1,2))
 
 
         #TRIGGERS
@@ -81,7 +81,7 @@ def main(cross,seed="42"):
         task = 'triggers'
         print("----------------------------------------------------")
         print(task)
-        path = 'Models_REDUCED3/' + language + '/' + task + '/'
+        path = 'Models_REDUCED/' + language + '/' + task + '/'
         bio = []
         configPath = open(path + 'config.json','r')
         config = json.load(configPath)
@@ -105,9 +105,9 @@ def main(cross,seed="42"):
         f1 = f1_score(triggers,bio,zero_division='0')
         precision = precision_score(triggers,bio)
         recall = recall_score(triggers,bio)
-        precisionTriggers.append(str(round(precision,2)))
-        recallTriggers.append(str(round(recall,2)))
-        f1Triggers.append(str(round(f1,2)))
+        precisionTriggers.append(str(precision,2))
+        recallTriggers.append(str(recall,2))
+        f1Triggers.append(str(f1,2))
 
     
         #ARGUMENTS
@@ -132,7 +132,7 @@ def main(cross,seed="42"):
             else:
                 linesGold.append(data['lineAll'])
         testR.close()
-        path = 'Models_REDUCED3/' + language + '/' + task + '/'
+        path = 'Models_REDUCED/' + language + '/' + task + '/'
         bio = []
         configPath = open(path + 'config.json','r')
         config = json.load(configPath)
@@ -159,11 +159,11 @@ def main(cross,seed="42"):
         f1 = f1_score(arguments,bio,zero_division='0')
         precision = precision_score(arguments,bio)
         recall = recall_score(arguments,bio)
-        f1ArgumentsGold.append(str(round(f1,2)))
-        precisionArguments.append(str(round(precision,2)))
-        recallArguments.append(str(round(recall,2)))
+        f1ArgumentsGold.append(str(f1,2))
+        precisionArguments.append(str(precision,2))
+        recallArguments.append(str(recall,2))
 
-    file = "Test/Reduced3/" + cross + "/seed"+ str(seed) + "/test.csv"
+    file = "Test/Reduced/" + cross + "/seed"+ str(seed) + "/test.csv"
     os.makedirs(os.path.dirname(file), exist_ok=True)
     csvFile = open(file,"w")
     csvTest = csv.writer(csvFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)

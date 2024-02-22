@@ -1,10 +1,10 @@
 cross=$1
 seeds=(16 44 85)
-python translateRed.py $cross
+python translate.py
 
 for seed in ${seeds[@]}; do
     echo $seed
-    for dir in MEE_BIO_REDUCED/*/
+    for dir in MEE_BIO/*/
     do
         language=$(basename "$dir")
         echo "$language"
@@ -23,14 +23,14 @@ for seed in ${seeds[@]}; do
             --load_best_model_at_end True \
             --save_strategy epoch \
             --save_total_limit 1 \
-            --train_file MEE_BIO_REDUCED/$language/entities/train.json \
+            --train_file MEE_BIO/$language/entities/train.json \
             --label_column_name labels \
-            --validation_file MEE_BIO/$cross/dev.json \
-            --test_file MEE_BIO/$cross/test.json \
-            --output_dir Models_REDUCED/$language/entity \
+            --validation_file MEE_BIO/$language/dev.json \
+            --test_file MEE_BIO/$language/test.json \
+            --output_dir Models/$language/entity \
             --overwrite_output_dir \
         
-        rm -rf Models_REDUCED/$language/entity/checkpoint-*/
+        rm -rf Models/$language/entity/checkpoint-*/
         
         srun python run_ner.py \
             --model_name_or_path xlm-roberta-base \
@@ -47,14 +47,14 @@ for seed in ${seeds[@]}; do
             --load_best_model_at_end True \
             --save_strategy epoch \
             --save_total_limit 1 \
-            --train_file MEE_BIO_REDUCED/$language/triggers/train.json \
+            --train_file MEE_BIO/$language/triggers/train.json \
             --label_column_name triggers \
-            --validation_file MEE_BIO/$cross/dev.json \
-            --test_file MEE_BIO/$cross/test.json \
-            --output_dir Models_REDUCED/$language/triggers \
+            --validation_file MEE_BIO/$language/dev.json \
+            --test_file MEE_BIO/$language/test.json \
+            --output_dir Models/$language/triggers \
             --overwrite_output_dir \
 
-        rm -rf Models_REDUCED/$language/triggers/checkpoint-*/
+        rm -rf Models/$language/triggers/checkpoint-*/
         
         srun python run_ner.py \
             --model_name_or_path xlm-roberta-base \
@@ -71,23 +71,22 @@ for seed in ${seeds[@]}; do
             --load_best_model_at_end True \
             --save_strategy epoch \
             --save_total_limit 1 \
-            --train_file MEE_BIO_REDUCED/$language/arguments/train.json \
+            --train_file MEE_BIO/$language/arguments/train.json \
             --label_column_name arguments \
-            --validation_file MEE_BIO/$cross/dev_arg.json \
-            --test_file MEE_BIO/$cross/test_arg.json \
-            --output_dir Models_REDUCED/$language/arguments \
+            --validation_file MEE_BIO/$language/dev_arg.json \
+            --test_file MEE_BIO/$language/test_arg.json \
+            --output_dir Models/$language/arguments \
             --overwrite_output_dir \
 
-        rm -rf Models_REDUCED/$language/arguments/checkpoint-*/
+        rm -rf Models/$language/arguments/checkpoint-*/
         
 
         
 
     done
     echo "Test-ak ejekutatzen"
-
-    srun python testRed.py $cross $seed
-
+#HEMEN
+    srun python test.py $seed
     echo "Bukatuta"
 done
 

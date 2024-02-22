@@ -8,8 +8,8 @@ import sys
 def main(cross):
     hasieratu()
     reduce(cross)
-    directoryR = 'MEE_REDUCED3'
-    directoryW = 'MEE_BIO_REDUCED3'
+    directoryR = 'MEE_REDUCED'
+    directoryW = 'MEE_BIO_REDUCED'
     for language in os.listdir(directoryR):
         pathR = directoryR + '/' + language
         pathW = directoryW + '/' + language
@@ -21,7 +21,7 @@ def main(cross):
 
 
 def translate(filenameR, filenameW,filetype):
-    allPath = 'MEE_BIO_REDUCED3/all/'+ filetype + '/train.json'
+    allPath = 'MEE_BIO_REDUCED/all/'+ filetype + '/train.json'
     os.makedirs(os.path.dirname(filenameW), exist_ok=True)
     os.makedirs(os.path.dirname(allPath), exist_ok=True)
     jsonR = open(filenameR, "r")
@@ -179,10 +179,10 @@ def arguments(jsonR,jsonW,jsonAll,lineCountAll):
     jsonAll.close()
 
 def hasieratu():
-    dirpath = os.path.join('MEE_BIO_REDUCED3')
+    dirpath = os.path.join('MEE_BIO_REDUCED')
     if os.path.exists(dirpath):
         shutil.rmtree(dirpath)
-    dirpath = os.path.join('MEE_REDUCED3')
+    dirpath = os.path.join('MEE_REDUCED')
     if os.path.exists(dirpath):
         shutil.rmtree(dirpath)
 
@@ -203,7 +203,7 @@ def getStartEnd(tokens):
 def reduce(cross):
     rd.seed(16)
     directoryR = 'MEE'
-    directoryW = 'MEE_REDUCED3'
+    directoryW = 'MEE_REDUCED'
     dirpath = os.path.join(directoryW)
     motak = ["entities","triggers","arguments"]
     maxim = [12508,1125,1416]

@@ -1,12 +1,14 @@
 import json
 import copy as cp
+import os
 
 
 dicLab = {"PER":"PERSON","ORG":"ORGANIZATION","GPE":"GEO","LOC":"LOCATION","FAC":"FACILITY","VEH":"VEHICLE","WEA":"WEAPON","TIME":"TIME","MON":"MONEY","CRIME":"CRIME","POS":"JOB"}
 dicTrig = {}
 pathR = "Eus/1500.eusie.annotated.json"
-pathW = "Eus/dev.json"
-pathWArg = "Eus/dev_arg.json"
+pathW = "MEE_BIO/euskara/dev.json"
+pathWArg = "MEE_BIO/euskara/dev_arg.json"
+os.makedirs(os.path.dirname(pathW), exist_ok=True)
 jsonR = open(pathR, "r")
 jsonW = open(pathW, "w")
 argJsonW = open(pathWArg, "w")
@@ -17,8 +19,9 @@ for line in jsonR:
     if lineCount == 150:
         jsonW.close()
         argJsonW.close()
-        pathW2 = "Eus/test.json"
-        pathW2Arg = "Eus/test_arg.json"
+        pathW2 = "MEE_BIO/euskara/test.json"
+        pathW2Arg = "MEE_BIO/euskara/test_arg.json"
+        os.makedirs(os.path.dirname(pathW2), exist_ok=True)
         jsonW = open(pathW2, "w")
         argJsonW = open(pathW2Arg, "w")
     data = json.loads(line)
