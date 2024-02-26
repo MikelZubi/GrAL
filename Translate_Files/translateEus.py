@@ -31,6 +31,7 @@ for line in jsonR:
     newdata["tokens"] = data["tokens"]
     newdata["labels"] = ["O" for i in range(len(data["tokens"]))]
     newdata["triggers"] = ["O" for i in range(len(data["tokens"]))]
+    newdata["arguments"] = []
 
     entityIds = {}
     

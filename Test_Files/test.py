@@ -68,12 +68,11 @@ def main(seed="42"):
                 bio.append(bioT)
 
         f1 = f1_score(entity, bio, zero_division='0')
-        precision = precision_score(entity, bio)
-        recall = recall_score(entity, bio)
-        precisionEntity.append(str(precision, 2))
-        recallEntity.append(str(recall, 2))
-        f1Entity.append(str(f1, 2))
-
+        precision = precision_score(entity, bio, zero_division='0')
+        recall = recall_score(entity, bio, zero_division='0')
+        precisionEntity.append(precision)
+        recallEntity.append(recall)
+        f1Entity.append(f1)
         # TRIGGERS
 
         task = 'triggers'
@@ -101,11 +100,11 @@ def main(seed="42"):
                 bio.append(bioT)
 
         f1 = f1_score(triggers, bio, zero_division='0')
-        precision = precision_score(triggers, bio)
-        recall = recall_score(triggers, bio)
-        precisionTriggers.append(str(precision, 2))
-        recallTriggers.append(str(recall, 2))
-        f1Triggers.append(str(f1, 2))
+        precision = precision_score(triggers, bio, zero_division='0')
+        recall = recall_score(triggers, bio, zero_division='0')
+        precisionTriggers.append(precision)
+        recallTriggers.append(recall)
+        f1Triggers.append(f1)
 
         # ARGUMENTS
 
@@ -151,11 +150,11 @@ def main(seed="42"):
                 bio.append(bioT)
 
         f1 = f1_score(arguments, bio, zero_division='0')
-        precision = precision_score(arguments, bio)
-        recall = recall_score(arguments, bio)
-        f1ArgumentsGold.append(str(f1, 2))
-        precisionArguments.append(str(precision, 2))
-        recallArguments.append(str(recall, 2))
+        precision = precision_score(arguments, bio,zero_division='0')
+        recall = recall_score(arguments, bio,zero_division='0')
+        f1ArgumentsGold.append(f1)
+        precisionArguments.append(precision)
+        recallArguments.append(recall)
 
     file = "Test/NotReduced/seed" + str(seed) + "/test.csv"
     os.makedirs(os.path.dirname(file), exist_ok=True)

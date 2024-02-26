@@ -1,11 +1,14 @@
 cross=$1
-seeds=(16 44 85)
-python translate.py
+seeds=(16)
+python Translate_Files/translate.py
 
 for seed in ${seeds[@]}; do
     echo $seed
     for dir in MEE_BIO/*/
     do
+        if [ "$dir" = "euskara" ]; then
+            continue
+        fi
         language=$(basename "$dir")
         echo "$language"
         srun python run_ner.py \
@@ -17,13 +20,13 @@ for seed in ${seeds[@]}; do
             --evaluation_strategy epoch \
             --per_device_train_batch_size 16 \
             --per_device_eval_batch_size 16 \
-            --num_train_epochs 64.0 \
+            --num_train_epochs 1.0 \
             --weight_decay 0.001 \
             --metric_for_best_model f1 \
             --load_best_model_at_end True \
             --save_strategy epoch \
             --save_total_limit 1 \
-            --train_file MEE_BIO/$language/entities/train.json \
+            --train_file MEE_BIO/$language/train.json \
             --label_column_name labels \
             --validation_file MEE_BIO/$language/dev.json \
             --test_file MEE_BIO/$language/test.json \
@@ -41,13 +44,13 @@ for seed in ${seeds[@]}; do
             --evaluation_strategy epoch \
             --per_device_train_batch_size 16 \
             --per_device_eval_batch_size 16 \
-            --num_train_epochs 64.0 \
+            --num_train_epochs 1.0 \
             --weight_decay 0.001 \
             --metric_for_best_model f1 \
             --load_best_model_at_end True \
             --save_strategy epoch \
             --save_total_limit 1 \
-            --train_file MEE_BIO/$language/triggers/train.json \
+            --train_file MEE_BIO/$language/train.json \
             --label_column_name triggers \
             --validation_file MEE_BIO/$language/dev.json \
             --test_file MEE_BIO/$language/test.json \
@@ -65,13 +68,13 @@ for seed in ${seeds[@]}; do
             --evaluation_strategy epoch \
             --per_device_train_batch_size 16 \
             --per_device_eval_batch_size 16 \
-            --num_train_epochs 64.0 \
+            --num_train_epochs 1.0 \
             --weight_decay 0.001 \
             --metric_for_best_model f1 \
             --load_best_model_at_end True \
             --save_strategy epoch \
             --save_total_limit 1 \
-            --train_file MEE_BIO/$language/arguments/train.json \
+            --train_file MEE_BIO/$language/train_arg.json \
             --label_column_name arguments \
             --validation_file MEE_BIO/$language/dev_arg.json \
             --test_file MEE_BIO/$language/test_arg.json \
@@ -86,7 +89,7 @@ for seed in ${seeds[@]}; do
     done
     echo "Test-ak ejekutatzen"
 #HEMEN
-    srun python test.py $seed
+    srun python Test_Files/test.py $seed
     echo "Bukatuta"
 done
 

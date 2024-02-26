@@ -1,6 +1,6 @@
 cross=$1
-seeds=(16 44 85)
-python translateRed.py $cross
+seeds=(16)
+python Translate_Files/translateRed.py $cross
 
 for seed in ${seeds[@]}; do
     echo $seed
@@ -17,7 +17,7 @@ for seed in ${seeds[@]}; do
             --evaluation_strategy epoch \
             --per_device_train_batch_size 16 \
             --per_device_eval_batch_size 16 \
-            --num_train_epochs 64.0 \
+            --num_train_epochs 1.0 \
             --weight_decay 0.001 \
             --metric_for_best_model f1 \
             --load_best_model_at_end True \
@@ -41,7 +41,7 @@ for seed in ${seeds[@]}; do
             --evaluation_strategy epoch \
             --per_device_train_batch_size 16 \
             --per_device_eval_batch_size 16 \
-            --num_train_epochs 64.0 \
+            --num_train_epochs 1.0 \
             --weight_decay 0.001 \
             --metric_for_best_model f1 \
             --load_best_model_at_end True \
@@ -65,7 +65,7 @@ for seed in ${seeds[@]}; do
             --evaluation_strategy epoch \
             --per_device_train_batch_size 16 \
             --per_device_eval_batch_size 16 \
-            --num_train_epochs 64.0 \
+            --num_train_epochs 1.0 \
             --weight_decay 0.001 \
             --metric_for_best_model f1 \
             --load_best_model_at_end True \
@@ -86,7 +86,7 @@ for seed in ${seeds[@]}; do
     done
     echo "Test-ak ejekutatzen"
 
-    srun python testRed.py $cross $seed
+    srun python Test_Files/testRed.py $cross $seed
 
     echo "Bukatuta"
 done
